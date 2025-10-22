@@ -1,30 +1,957 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizza Window</title>
+    <link rel="icon" type="image/x-icon" href="./Images/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
+    <link rel="stylesheet" href="" th:href="@{/css/Home.css}" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-<head>
-	<meta charset="UTF-8" />
-	<title>FoodFrenzy</title>
-	<link rel="icon" type="image/x-icon" href="./Images/logo.png">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-	<link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
-	<link rel="stylesheet" href="" th:href="@{css/Home.css}" />
-	<style>
-		body{
-			background-image: url('./Images/istockphoto-1006271368-612x612.jpg'); 
-			 background-size: cover; 
-        
-    
-		}
-	</style>
-</head>
+      html {
+        scroll-behavior: smooth;
+      }
 
-<body>
-	<nav th:replace="~{Navigation::navbar()}"></nav>
-	<div class="text">
-	<h1 >WELCOME TO OUR WEBSITE </h1>
-	<h3 >Where Quality Meets Innovation! <br /> Explore our wide range of products designed to enhance your life.</h3>
-	</div>
-	
-</body>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8f9fa;
+        overflow-x: hidden;
+      }
 
+      /* Hero Section */
+      .hero-section {
+        /* background-image: url("./Images/istockphoto-1006271368-612x612.jpg"); */
+        /* background-size: cover;
+        background-position: center; */
+        /* background-attachment: scroll; */
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 107, 107, 0.9) 0%,
+          rgba(255, 159, 64, 0.85) 50%,
+          rgba(255, 205, 86, 0.8) 100%
+        );
+        z-index: 1;
+      }
+
+      .floating-shapes {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .shape {
+        position: absolute;
+        opacity: 0.1;
+        animation: float 20s infinite ease-in-out;
+        color: white;
+      }
+
+      .shape1 {
+        top: 10%;
+        left: 10%;
+        font-size: 100px;
+        animation-delay: 0s;
+      }
+
+      .shape2 {
+        top: 60%;
+        right: 15%;
+        font-size: 80px;
+        animation-delay: 2s;
+      }
+
+      .shape3 {
+        bottom: 15%;
+        left: 20%;
+        font-size: 90px;
+        animation-delay: 4s;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        max-width: 900px;
+        animation: fadeInUp 1s ease-out;
+      }
+
+      .logo-section {
+        margin-bottom: 30px;
+        animation: bounceIn 1.2s ease-out;
+      }
+
+      .logo-circle {
+        width: 120px;
+        height: 120px;
+        background: white;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      .logo-circle i {
+        font-size: 60px;
+        color: #ff6b6b;
+      }
+
+      .text h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+        letter-spacing: 2px;
+        animation: slideInLeft 1s ease-out;
+        color: white;
+      }
+
+      .text h3 {
+        font-size: 1.5rem;
+        margin-bottom: 40px;
+        font-weight: 300;
+        line-height: 1.8;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+        animation: slideInRight 1s ease-out;
+        color: white;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeIn 1.5s ease-out;
+        margin-bottom: 60px;
+      }
+
+      .btn {
+        padding: 18px 45px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn-primary {
+        background: white;
+        color: #ff6b6b;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: white;
+        border: 3px solid white;
+      }
+
+      .btn-secondary:hover {
+        background: white;
+        color: #ff6b6b;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .features {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        animation: fadeInUp 2s ease-out;
+      }
+
+      .feature-card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-radius: 20px;
+        padding: 30px;
+        width: 250px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      }
+
+      .feature-card i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .feature-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .feature-card p {
+        font-size: 0.95rem;
+        color: white;
+        line-height: 1.6;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      /* About Section */
+      .about-section {
+        padding: 100px 20px;
+        background: white;
+        position: relative;
+      }
+
+      .section-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 3rem;
+        color: #ff6b6b;
+        margin-bottom: 20px;
+        font-weight: 800;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 60px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-top: 40px;
+      }
+
+      .about-card {
+        background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+        padding: 40px;
+        border-radius: 20px;
+        color: white;
+        text-align: center;
+        transition: transform 0.3s ease;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+      }
+
+      .about-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .about-card i {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+      }
+
+      .about-card h3 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+      }
+
+      .about-card p {
+        font-size: 1rem;
+        line-height: 1.6;
+        opacity: 0.95;
+      }
+
+      /* Menu Preview Section */
+      .menu-section {
+        padding: 100px 20px;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8cc 100%);
+        position: relative;
+      }
+
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-top: 60px;
+      }
+
+      .menu-item {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .menu-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .menu-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        color: white;
+      }
+
+      .menu-content {
+        padding: 25px;
+      }
+
+      .menu-content h3 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .menu-content p {
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.6;
+      }
+
+      .price {
+        font-size: 1.8rem;
+        color: #ff6b6b;
+        font-weight: 700;
+      }
+
+      .menu-content .btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+        font-size: 1rem;
+        padding: 12px;
+      }
+
+      /* Testimonials Section */
+      .testimonials-section {
+        padding: 100px 20px;
+        background: white;
+        position: relative;
+      }
+
+      .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 60px;
+      }
+
+      .testimonial-card {
+        background: #f8f9fa;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        position: relative;
+      }
+
+      .testimonial-card i {
+        font-size: 3rem;
+        color: #ffa94d;
+        margin-bottom: 20px;
+      }
+
+      .testimonial-text {
+        font-size: 1.1rem;
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        font-style: italic;
+      }
+
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .author-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .author-info h4 {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .author-info p {
+        color: #999;
+        font-size: 0.9rem;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        padding: 100px 20px;
+        background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+        text-align: center;
+        color: white;
+        position: relative;
+      }
+
+      .cta-section h2 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 800;
+      }
+
+      .cta-section p {
+        font-size: 1.3rem;
+        margin-bottom: 40px;
+        opacity: 0.95;
+      }
+
+      .cta-section .btn {
+        background: white;
+        color: #ff6b6b;
+        font-size: 1.2rem;
+        padding: 20px 50px;
+      }
+
+      .cta-section .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Footer */
+      .footer {
+        background: #2c2c2c;
+        color: white;
+        padding: 60px 20px 30px;
+        position: relative;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto 40px;
+      }
+
+      .footer-column h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #ffa94d;
+      }
+
+      .footer-column p,
+      .footer-column a {
+        color: #ccc;
+        line-height: 2;
+        text-decoration: none;
+        display: block;
+        transition: color 0.3s ease;
+      }
+
+      .footer-column a:hover {
+        color: #ffa94d;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        background: #444;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+      }
+
+      .social-links a:hover {
+        background: #ffa94d;
+        transform: translateY(-3px);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 30px;
+        border-top: 1px solid #444;
+        color: #999;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        25% {
+          transform: translateY(-30px) rotate(5deg);
+        }
+        50% {
+          transform: translateY(0) rotate(0deg);
+        }
+        75% {
+          transform: translateY(30px) rotate(-5deg);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .text h1 {
+          font-size: 2.5rem;
+        }
+
+        .text h3 {
+          font-size: 1.1rem;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+
+        .logo-circle {
+          width: 90px;
+          height: 90px;
+        }
+
+        .logo-circle i {
+          font-size: 45px;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn {
+          width: 100%;
+          max-width: 300px;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav th:replace="~{Navigation::navbar()}"></nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="floating-shapes">
+        <i class="fas fa-pizza-slice shape shape1"></i>
+        <i class="fas fa-hamburger shape shape2"></i>
+        <i class="fas fa-ice-cream shape shape3"></i>
+      </div>
+
+      <div class="hero-content">
+        <div class="logo-section">
+          <div class="logo-circle">
+            <i class="fas fa-utensils"></i>
+          </div>
+        </div>
+
+        <div class="text">
+          <h1>WELCOME TO Pizza Window</h1>
+          <h3>
+            Where Quality Meets Innovation! <br />
+            Explore our wide range of products designed to enhance your life.
+          </h3>
+        </div>
+
+        <div class="cta-buttons">
+          <a href="#" th:href="@{/products}" class="btn btn-primary">
+            <i class="fas fa-shopping-cart"></i>
+            Order Now
+          </a>
+          <a href="#menu" class="btn btn-secondary">
+            <i class="fas fa-compass"></i>
+            Explore Menu
+          </a>
+        </div>
+
+        <div class="features">
+          <div class="feature-card">
+            <i class="fas fa-fire"></i>
+            <h3>Fresh & Hot</h3>
+            <p>
+              Always fresh ingredients prepared with passion and delivered hot
+              to your door
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <i class="fas fa-bolt"></i>
+            <h3>Fast Delivery</h3>
+            <p>
+              Lightning-fast delivery service ensuring your food arrives fresh
+              and on time
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <i class="fas fa-star"></i>
+            <h3>Quality First</h3>
+            <p>
+              Premium quality products that meet the highest standards of
+              excellence
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+      <div class="section-container">
+        <h2 class="section-title">Why Choose Pizza Window?</h2>
+        <p class="section-subtitle">
+          We're not just another food delivery service. We're your partner in
+          culinary excellence.
+        </p>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <i class="fas fa-leaf"></i>
+            <h3>100% Fresh</h3>
+            <p>
+              We source ingredients daily from local farms and suppliers to
+              ensure maximum freshness and quality in every bite.
+            </p>
+          </div>
+
+          <div class="about-card">
+            <i class="fas fa-heart"></i>
+            <h3>Made with Love</h3>
+            <p>
+              Every dish is prepared by our passionate chefs who pour their
+              heart into creating memorable dining experiences.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Menu Preview Section -->
+    <section class="menu-section" id="menu">
+      <div class="section-container">
+        <h2 class="section-title">Popular Dishes</h2>
+        <p class="section-subtitle">
+          Discover our most loved menu items, crafted with premium ingredients
+        </p>
+
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div class="menu-image">
+              <i class="fas fa-pizza-slice"></i>
+            </div>
+            <div class="menu-content">
+              <h3>Special Pizza's</h3>
+              <p>
+                (Cheese, Paneer,Corn, Onion, Mushroom, Black Onion & Jalepenos)
+              </p>
+              <span class="price">Starting from Rs.89</span>
+              <a href="#" th:href="@{/products}" class="btn btn-primary"
+                >Add to Cart</a
+              >
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <div class="menu-image">
+              <i class="fas fa-hamburger"></i>
+            </div>
+            <div class="menu-content">
+              <h3>Garlic Breads</h3>
+              <p>Juicy and cheesy Garlic breads</p>
+              <span class="price">Starting From Rs.69</span>
+              <a href="#" th:href="@{/products}" class="btn btn-primary"
+                >Add to Cart</a
+              >
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <div class="menu-image">
+              <i class="fas fa-drumstick-bite"></i>
+            </div>
+            <div class="menu-content">
+              <h3>Fries and Snacks</h3>
+              <p>Perfectly seasoned and fried to golden perfection</p>
+              <span class="price">Starting From Rs.69</span>
+              <a href="#" th:href="@{/products}" class="btn btn-primary"
+                >Add to Cart</a
+              >
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <div class="menu-image">
+              <i class="fas fa-ice-cream"></i>
+            </div>
+            <div class="menu-content">
+              <h3>Cold Coffee's and More</h3>
+              <p>Handcrafted sweet treats to satisfy your cravings</p>
+              <span class="price">Starting From Rs.30</span>
+              <a href="#" th:href="@{/products}" class="btn btn-primary"
+                >Add to Cart</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section
+    <section class="testimonials-section">
+      <div class="section-container">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <p class="section-subtitle">
+          Don't just take our word for it - hear from our happy customers
+        </p>
+
+        <div class="testimonial-grid">
+          <div class="testimonial-card">
+            <i class="fas fa-quote-left"></i>
+            <p class="testimonial-text">
+              "Best food delivery experience I've ever had! The quality is
+              consistently amazing and delivery is always on time. Highly
+              recommend!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">SK</div>
+              <div class="author-info">
+                <h4>Sarah Khan</h4>
+                <p>Regular Customer</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <i class="fas fa-quote-left"></i>
+            <p class="testimonial-text">
+              "FoodFrenzy has become our go-to for family dinners. The variety
+              is incredible and everything tastes homemade. Love it!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">RP</div>
+              <div class="author-info">
+                <h4>Raj Patel</h4>
+                <p>Food Enthusiast</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <i class="fas fa-quote-left"></i>
+            <p class="testimonial-text">
+              "Outstanding service! The app is user-friendly, prices are
+              reasonable, and the food quality is top-notch. 5 stars all the
+              way!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">MS</div>
+              <div class="author-info">
+                <h4>Maria Singh</h4>
+                <p>Verified Buyer</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="section-container">
+        <h2>Ready to Order?</h2>
+        <p>
+          Join thousands of happy customers and experience the Pizza Window
+          difference today!
+        </p>
+        <a href="#" th:href="@{/products}" class="btn">
+          <i class="fas fa-shopping-bag"></i>
+          Start Ordering Now
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h3>Pizza Window</h3>
+          <p>
+            Bringing delicious food to your doorstep since 2020. Quality, speed,
+            and taste - that's our promise.
+          </p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <a href="#" th:href="@{/}">Home</a>
+          <a href="#" th:href="@{/products}">Menu</a>
+          <a href="#">About Us</a>
+          <a href="#">Contact</a>
+        </div>
+
+        <div class="footer-column">
+          <h3>Customer Service</h3>
+          <a href="#">FAQs</a>
+          <a href="#">Delivery Info</a>
+          <a href="#">Returns Policy</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+
+        <div class="footer-column">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-phone"></i> +91 7020921457</p>
+          <p><i class="fas fa-envelope"></i> info@pizzawindow.com</p>
+          <p>
+            <i class="fas fa-map-marker-alt"></i> Shop No 1, Vidyanagari,
+            opposite to Jawahar Bakery, Mohan Nagar, Dhankawadi, Pune,
+            Maharashtra 411043
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>
+          &copy; 2025 Pizza Window. All rights reserved. | Designed By Yash
+          Chandanshiv
+        </p>
+      </div>
+    </footer>
+  </body>
 </html>

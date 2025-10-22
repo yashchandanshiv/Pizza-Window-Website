@@ -1,80 +1,360 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FoodFrenzy - Location</title>
+    <link rel="icon" type="image/x-icon" href="./Images/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
+    <style>
+      /* Base styles from home.html */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8f9fa; /* Standard light grey background */
+        overflow-x: hidden;
+        padding-top: 80px; /* Space for fixed navbar */
+      }
 
-<head>
-	<meta charset="UTF-8" />
-	<title>FoodFrenzy</title>
-	<link rel="icon" type="image/x-icon" href="./img/b.png">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-	<link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
-	<link rel="stylesheet" href="" th:href="@{/css/Locate_us.css}" />
-	<style>
-		.icons{
-			align-items: center;
-		}
-	</style>
-</head>
+      /* ================================== */
+      /* === NAVBAR OVERRIDE STYLES === */
+      /* ================================== */
+      nav {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.5),
+          transparent
+        ) !important;
+        z-index: 1000;
+        padding: 15px 5% !important;
+        box-sizing: border-box !important;
+        box-shadow: none !important;
+      }
+      nav a,
+      nav a:visited {
+        color: #ffffff !important;
+        font-weight: 500 !important;
+      }
+      nav a.logo {
+        /* Assuming your logo is <a class="logo">...</a> */
+        font-size: 1.8rem !important;
+        font-weight: bold !important;
+      }
+      nav a.login-btn {
+        /* Assuming login is <a class="login-btn">...</a> */
+        border: 1px solid #ffffff !important;
+        padding: 8px 20px !important;
+        border-radius: 20px !important;
+      }
+      nav a.login-btn:hover {
+        background-color: #ffffff !important;
+        color: #ff6b6b !important;
+      }
 
-<body>
-	<nav th:replace="~{Navigation::navbar()}"></nav>
-	<center>
-		<h1 style="color: orangered; ">Our Location</h1>
-		<small style="color: red;font-weight: bold;">Internet required..</small>
-	</center>
-	<div class="location">
-<section class="location">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.2587642448775!2d77.69820641413502!3d12.955286818742959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae13afc62813f9%3A0xdcf1837520b28dfa!2sJSpiders%20Marathahalli!5e0!3m2!1sen!2sin!4v1674150882329!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </section>
+      /* ================================== */
+      /* === LOCATION SECTION STYLES === */
+      /* ================================== */
+      .location-section {
+        padding: 60px 20px;
+      }
+      .section-container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .section-title {
+        text-align: center;
+        font-size: 3rem;
+        color: #ff6b6b;
+        margin-bottom: 20px;
+        font-weight: 800;
+      }
+      .section-subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 60px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
 
-    </section>
+      /* Grid for Map & Contact Info */
+      .location-grid {
+        display: grid;
+        grid-template-columns: 1fr; /* Stacked by default */
+        gap: 30px;
+      }
 
-    <section class="contact-us">
-        <div class="row">
-            <div class="contact-col">
-                <div>
-                    <i class="contact-icon fas fa-home"></i>
-                    <span>
-                        <h5>761/1, 3rd Floor, Outer Ring Rd, next to Chaitanya Techno School, near KLM Mall, Marathahalli, Bengaluru, Karnataka 560037</h5>
-                        <p>Bengaluru, India</p>
-                    </span>
-                </div>
+      /* Card styles from home.html */
+      .location-card,
+      .contact-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+      }
 
-                <div>
-                    <i class="contact-icon fas fa-phone"></i>
-                    <span>
-                        <h5>+917234020314</h5>
-                        <p>Monday to Saturday, 10AM to 8PM</p>
-                    </span>
-                </div>
+      .location-card iframe {
+        width: 100%;
+        height: 450px;
+        border: 0;
+        border-radius: 15px; /* Rounded corners for the map */
+      }
 
-                <div>
-                    <i class="contact-icon fas fa-envelope"></i>
-                    <span>
-                        <h5>scanurag@gmail.com</h5>
-                        <p>Email us your query</p>
-                    </span>
-                </div>
-            </div>
-            <div class="contact-col">
-                <form action="" method="post" enctype="text/plain">
-                    <input type="text" name="name" placeholder="Enter your name" required>
-                    <input type="email" name="email" placeholder="Enter email address" required>
-                    <input type="text" name="subject" placeholder="Enter subject" required>
-                    <textarea rows="8" name="message" placeholder="Message" required></textarea>
-                    <button type="submit" class="visit-btn red-btn">Send</button>
-                </form>
-            </div>
-        </div>
-    </section>
+      /* Contact Info Grid (Info + Form) */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
 
-    <section class="footer">
-        <h4 style="text-align: center;">About Us</h4>
-        <p style="text-align: center;">
-        ”Explore our wide range of products designed to enhance your life."
+      .contact-info-col div {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 25px;
+      }
+      .contact-info-col .contact-icon {
+        font-size: 1.8rem;
+        color: #ff6b6b;
+        margin-right: 20px;
+        width: 30px;
+        text-align: center;
+      }
+      .contact-info-col h5 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+      .contact-info-col p {
+        margin: 0;
+        font-size: 1rem;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      /* Form styling */
+      .contact-form-col h3 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .contact-form-col input,
+      .contact-form-col textarea {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1rem;
+      }
+
+      /* Button style from home.html */
+      .btn {
+        padding: 15px 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+        color: white;
+      }
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+      }
+
+      /* Responsive */
+      @media (max-width: 900px) {
+        .contact-grid {
+          grid-template-columns: 1fr; /* Stack info and form */
+        }
+      }
+
+      /* ================================== */
+      /* === FOOTER (from home.html) === */
+      /* ================================== */
+      .footer {
+        background: #2c2c2c;
+        color: white;
+        padding: 60px 20px 30px;
+        position: relative;
+        margin-top: 100px; /* Space above footer */
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto 40px;
+      }
+      .footer-column h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #ffa94d;
+      }
+      .footer-column p,
+      .footer-column a {
+        color: #ccc;
+        line-height: 2;
+        text-decoration: none;
+        display: block;
+        transition: color 0.3s ease;
+      }
+      .footer-column a:hover {
+        color: #ffa94d;
+      }
+      .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        background: #444;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+      }
+      .social-links a:hover {
+        background: #ffa94d;
+        transform: translateY(-3px);
+      }
+      .footer-bottom {
+        text-align: center;
+        padding-top: 30px;
+        border-top: 1px solid #444;
+        color: #999;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav th:replace="~{Navigation::navbar()}"></nav>
+
+    <section class="location-section">
+      <div class="section-container">
+        <h2 class="section-title">Visit Us or Get in Touch</h2>
+        <p class="section-subtitle">
+          We're always happy to hear from you. Find us on the map or send us a
+          message!
         </p>
-            <p style="text-align: center;">© Copyright 2019 FoodFrenzy</pstyle="text-align: center;">
-        </div>
-    </section>
-</body>
 
+        <div class="location-grid">
+          <div class="location-card">
+            <iframe
+              src="http://googleusercontent.com/maps/google.com/3"
+              height="450"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-grid">
+              <div class="contact-info-col">
+                <h3>Contact Information</h3>
+                <div>
+                  <i class="contact-icon fas fa-map-marker-alt"></i>
+                  <span>
+                    <h5>Address</h5>
+                    <p>
+                      Shop No 1, Vidyanagari, opposite to Jawahar Bakery, Mohan
+                      Nagar, Dhankawadi, Pune, Maharashtra 411043
+                    </p>
+                  </span>
+                </div>
+                <div>
+                  <i class="contact-icon fas fa-phone"></i>
+                  <span>
+                    <h5>Phone</h5>
+                    <p>+91 70209 21457</p>
+                  </span>
+                </div>
+                <div>
+                  <i class="contact-icon fas fa-envelope"></i>
+                  <span>
+                    <h5>Email</h5>
+                    <p>info@pizzawindow.com</p>
+                  </span>
+                </div>
+                <div>
+                  <i class="contact-icon fas fa-clock"></i>
+                  <span>
+                    <h5>Hours</h5>
+                    <p>Open 3:00 PM - 2:00 AM</p>
+                  </span>
+                </div>
+              </div>
+
+              <div class="contact-form-col">
+                <h3>Send Us a Message</h3>
+                <form action="" method="post" enctype="text/plain">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter your name"
+                    required
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter email address"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="subject"
+                    placeholder="Enter subject"
+                    required
+                  />
+                  <textarea
+                    rows="5"
+                    name="message"
+                    placeholder="Message"
+                    required
+                  ></textarea>
+                  <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" th:replace="~{Home::footer()}"></footer>
+  </body>
 </html>

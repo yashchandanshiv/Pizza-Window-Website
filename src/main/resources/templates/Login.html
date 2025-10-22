@@ -1,51 +1,251 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-	<meta charset="UTF-8" />
-	<title>FoodFrenzy</title>
-	<link rel="icon" type="image/x-icon" href="./img/b.png">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-	<link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
-	<link rel="stylesheet" href="" th:href="@{/css/Login.css}" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pizza Window - Login</title>
+    <link rel="icon" type="image/x-icon" href="./Images/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
+    <style>
+      /* Base styles from home.html */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* Full-screen hero gradient from home.html */
+        background: linear-gradient(
+          135deg,
+          rgba(255, 107, 107, 0.9) 0%,
+          rgba(255, 159, 64, 0.85) 50%,
+          rgba(255, 205, 86, 0.8) 100%
+        );
+        background-attachment: fixed;
+        overflow-x: hidden;
+        padding-top: 80px; /* Space for fixed navbar */
+      }
 
-<body>
-	<nav th:replace="~{Navigation::navbar()}">
-	</nav>
-	<div class="LoginContainer">
-		<div class="admin">
-			<div class="content">
-				<strong style="font-size: 16px;margin-bottom: 0px;">BUSINESS</strong>
-				<h2>For <span style="color:green;">Admins</span></h2>
+      /* ================================== */
+      /* === NAVBAR OVERRIDE STYLES === */
+      /* ================================== */
+      nav {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        /* Transparent gradient to blend with body */
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.5),
+          transparent
+        ) !important;
+        z-index: 1000;
+        padding: 15px 5% !important;
+        box-sizing: border-box !important;
+        box-shadow: none !important;
+      }
+      nav a,
+      nav a:visited {
+        color: #ffffff !important;
+        font-weight: 500 !important;
+      }
+      nav a.logo {
+        font-size: 1.8rem !important;
+        font-weight: bold !important;
+      }
+      nav a.login-btn {
+        border: 1px solid #ffffff !important;
+        padding: 8px 20px !important;
+        border-radius: 20px !important;
+      }
+      nav a.login-btn:hover {
+        background-color: #ffffff !important;
+        color: #ff6b6b !important;
+      }
 
-				<form th:action="@{/adminLogin}" method="post">
-					<b>Email :</b>
-					<input type="email" name="email" placeholder="Enter email..." class="email"> <br />
-					<b>Password:</b>
-					<input type="password" name="password" placeholder="Enter password" class="password">
-					<small style="color: red;" th:text="${error}"></small><br />
-					<button type="submit" class="loginButton">Log in</button>
-				</form>
-			</div>
-		</div>
-		<div class="user">
-			<div class="content">
-				<h2> For <span style="color:green;">Users</span></h2>
-				<form th:action="@{/userLogin}" method="post" class="form">
-					<b>Email :</b>
-					<input type="email" name="userEmail" placeholder="Enter email"><br />
+      /* ================================== */
+      /* === LOGIN CONTAINER STYLES === */
+      /* ================================== */
+      .LoginContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap; /* Allow cards to stack on small screens */
+        gap: 40px;
+        padding: 40px 20px;
+        min-height: calc(100vh - 80px); /* Fill screen below navbar */
+      }
 
-					<b>Password:</b>
-					<input type="password" name="userPassword" placeholder="Enter password" required maxlength="8" minlength="4" class="userPassword"><br />
+      /* Login Card Styles */
+      .admin,
+      .user {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 450px; /* Max width for login forms */
+        transition: transform 0.3s ease;
+        box-sizing: border-box;
+      }
+      .admin:hover,
+      .user:hover {
+        transform: translateY(-5px);
+      }
 
-					<small style="color: red;" th:text="${error2}"></small><br />
-					<button type="submit" class="loginButton">Log in</button><br>
+      .content {
+        padding: 40px;
+      }
 
-					<p>I don't have an account? <a href="register.html" style="color: green;">Register Here</a></p>
-				</form>
-			</div>
-		</div>
-	</div>
-</body>
+      /* Form Heading */
+      .content h2 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .content h2 span {
+        color: #ff6b6b; /* Changed from green to brand red */
+      }
+      .content strong {
+        text-align: center;
+        display: block;
+        color: #888;
+        margin-bottom: 5px;
+      }
 
+      /* Form Styling */
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      form b {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 5px;
+        margin-top: 10px;
+      }
+
+      form input[type="email"],
+      form input[type="password"] {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-sizing: border-box;
+      }
+
+      form small {
+        text-align: center;
+        margin-top: 10px;
+        min-height: 1.2em; /* Prevents layout shift */
+      }
+
+      /* Button Style (from home.html) */
+      .loginButton {
+        padding: 15px 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+        color: white;
+        margin-top: 10px;
+      }
+      .loginButton:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+      }
+
+      /* Register Link */
+      form p {
+        text-align: center;
+        color: #666;
+        margin-top: 20px;
+      }
+      form p a {
+        color: #ff6b6b; /* Changed from green to brand red */
+        font-weight: 600;
+        text-decoration: none;
+      }
+      form p a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav th:replace="~{Navigation::navbar}"></nav>
+
+    <div class="LoginContainer">
+      <div class="admin">
+        <div class="content">
+          <strong style="font-size: 16px; margin-bottom: 0px">BUSINESS</strong>
+          <h2>For <span>Admins</span></h2>
+
+          <form th:action="@{/adminLogin}" method="post">
+            <b>Email :</b>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter email..."
+              class="email"
+            />
+            <b>Password:</b>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              class="password"
+            />
+            <small style="color: red" th:text="${error}"></small>
+            <button type="submit" class="loginButton">Log in</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="user">
+        <div class="content">
+          <h2>For <span>Users</span></h2>
+          <form th:action="@{/userLogin}" method="post" class="form">
+            <b>Email :</b>
+            <input type="email" name="userEmail" placeholder="Enter email" />
+
+            <b>Password:</b>
+            <input
+              type="password"
+              name="userPassword"
+              placeholder="Enter password"
+              required
+              maxlength="8"
+              minlength="4"
+              class="userPassword"
+            />
+
+            <small style="color: red" th:text="${error2}"></small>
+            <button type="submit" class="loginButton">Log in</button>
+
+            <p>
+              I don't have an account?
+              <a href="register.html" th:href="@{/register}">Register Here</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
