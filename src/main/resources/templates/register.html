@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,15 +73,7 @@
   </style>
 </head>
 <body>
-<div class="navbar">
-  <div class="logo"><a href="/">🍕 Pizza Window</a></div>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/products">Menu</a>
-    <a href="/locate">Location</a>
-    <a href="/about">About</a>
-    <a href="/login">Login</a>
-  </div>
+<nav th:replace="~{Navigation::navbar()}"></nav>
 </div>
 <div class="register-wrapper">
   <div class="register-container">

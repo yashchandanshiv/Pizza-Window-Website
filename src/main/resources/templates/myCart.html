@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Pizza Window | My Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+        body { background: #fff8f0; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+        .navbar { /* copy your existing navbar styles here */ }
+        .cart-section { max-width: 800px; margin: 40px auto; background: white; border-radius: 18px; box-shadow: 0 2px 16px #eee; padding: 24px;}
+        h2 { color: #FF6B6B; text-align: center; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px;}
+        th, td { padding: 10px 13px; border-bottom: 1px solid #eee;}
+        th { background: #FFB88C; color: #333; }
+        tr:last-child td { border-bottom: none; }
+        .total-row td { font-weight: bold; border-top: 2px solid #FFB88C; }
+        .checkout-btn { background: #FF6B6B; color: white; border: none; border-radius: 12px; padding: 10px 30px; font-size: 17px; cursor: pointer; margin: 18px auto 0; display: block; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>🍕 Pizza Window</span>
+    <span>
+      <a href="/">Home</a>
+      <a href="/products">Menu</a>
+      <a href="/locate">Location</a>
+      <a href="/about">About</a>
+      <a href="/myCart">My Cart</a>
+      <a href="/logout">Logout</a>
+    </span>
+</div>
+
+<section class="cart-section">
+    <h2>My Cart</h2>
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>QTY</th>
+            <th>Subtotal</th>
+            <th>Remove</th>
+        </tr>
+        <tr th:each="item : ${cart.items}">
+            <td th:text="${item.product.pname}">Pizza</td>
+            <td th:text="${item.product.pprice}">200</td>
+            <td th:text="${item.quantity}">1</td>
+            <td th:text="${#numbers.formatDecimal(item.product.pprice * item.quantity, 2, 'POINT', ',', '')}">200</td>
+            <td>
+                <a th:href="@{'/cart/remove/' + ${item.id}}" style="color:red">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+        <tr class="total-row">
+            <td colspan="3">Total</td>
+            <td th:text="${cart.items.?sum(item -> item.product.pprice * item.quantity)}">0</td>
+            <td></td>
+        </tr>
+    </table>
+    <button class="checkout-btn">Checkout</button>
+</section>
+</body>
+</html>

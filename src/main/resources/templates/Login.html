@@ -256,26 +256,7 @@
 </head>
 <body>
 <!-- Navigation Bar -->
-<div class="navbar">
-  <div class="logo">
-    <a href="/">🍕 Pizza Window</a>
-  </div>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/products">Menu</a>
-    <a href="/locate">Location</a>
-    <a href="/about">About</a>
-
-    <!-- User Info (shown when logged in) -->
-    <div class="user-info" id="userInfo" style="display: none;">
-      <span class="user-email" id="userEmail"></span>
-      <a href="javascript:void(0)" class="logout-btn" onclick="handleLogout()">Logout</a>
-    </div>
-
-    <!-- Login Link (shown when not logged in) -->
-    <a href="/login" id="loginLink" style="display: block;">Login</a>
-  </div>
-</div>
+<nav th:replace="~{Navigation::navbar()}"></nav>
 
 <!-- Login Wrapper -->
 <div class="login-wrapper">
