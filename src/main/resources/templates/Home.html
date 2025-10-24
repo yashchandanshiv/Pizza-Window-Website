@@ -9,8 +9,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
-    <link rel="stylesheet" href="" th:href="@{/css/Home.css}" />
+    <link rel="stylesheet" th:href="@{/css/Navigation.css}" />
+    <link rel="stylesheet" th:href="@{/css/Home.css}" />
+
     <style>
       * {
         margin: 0;
@@ -250,6 +251,26 @@
         max-width: 1200px;
         margin: 0 auto;
       }
+
+      .logo-circle {
+    width: 120px;
+    height: 120px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    margin: 0 auto 30px;
+}
+
+.logo-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    padding: 10px;
+}
 
       .section-title {
         text-align: center;
@@ -659,7 +680,7 @@
   </head>
 
   <body>
-    <nav th:replace="~{Navigation::navbar()}"></nav>
+     <nav th:replace="~{Navigation::navbar()}"></nav>
 
     <!-- Hero Section -->
     <section class="hero-section">
@@ -672,7 +693,7 @@
       <div class="hero-content">
         <div class="logo-section">
           <div class="logo-circle">
-            <i class="fas fa-utensils"></i>
+            <img src="/images/logo.png" alt="Pizza Window Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%; padding: 10px;">
           </div>
         </div>
 
@@ -953,5 +974,10 @@
         </p>
       </div>
     </footer>
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- API Script -->
+    <script src="/api.js"></script>
   </body>
 </html>

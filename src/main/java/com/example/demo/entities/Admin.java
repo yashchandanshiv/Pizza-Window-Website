@@ -1,72 +1,37 @@
 package com.example.demo.entities;
 
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-//THis is Admin.java
 @Entity
-@Table(name = "admin")
-public class Admin
-{
-	@Id
+@Table(name = "admins")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Admin {
+    
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int adminId;
-
-    @NotNull
-    private String adminName;
-
-    @NotNull
-    @Email
-    private String adminEmail;
-
-    private String adminPassword;
-
-    private String adminNumber;
-public int getAdminId() {
-	return adminId;
-}
-public void setAdminId(int adminId) {
-	this.adminId = adminId;
-}
-public String getAdminName() {
-	return adminName;
-}
-public void setAdminName(String adminName) {
-	this.adminName = adminName;
-}
-public String getAdminEmail() {
-	return adminEmail;
-}
-public void setAdminEmail(String adminEmail) {
-	this.adminEmail = adminEmail;
-}
-public String getAdminPassword() {
-	return adminPassword;
-}
-public void setAdminPassword(String adminPassword) {
-	this.adminPassword = adminPassword;
-}
-public String getAdminNumber() {
-	return adminNumber;
-}
-public void setAdminNumber(String adminNumber) {
-	this.adminNumber = adminNumber;
-}
-@Override
-public String toString() {
-	return "Admin [adminId=" + adminId + ", adminName=" + adminName + ", adminEmail=" + adminEmail + ", adminPassword="
-			+ adminPassword + ", adminNumber=" + adminNumber + "]";
-}
-
-
-
-
-
+    private Long id;
+    
+    @Column(nullable = false)
+    private String fullName;
+    
+    @Column(nullable = false, unique = true)
+    private String email;
+    
+    @Column(nullable = false)
+    private String password;
+    
+    @Column(nullable = false)
+    private String role = "ADMIN";
+    
+    @Column(nullable = false)
+    private Boolean active = true;
+    
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

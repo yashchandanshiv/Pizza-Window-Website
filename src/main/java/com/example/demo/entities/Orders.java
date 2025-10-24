@@ -1,96 +1,55 @@
 package com.example.demo.entities;
-import java.util.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
-public class Orders
-{
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int oId;
-	private String oName;
-	private double oPrice;
-	private int oQuantity;
-	private Date orderDate;
-	private double totalAmmout;
-	
-	@ManyToOne
-	@JoinColumn(name="user_u_id")
-	private User user;
-
-	public Date getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
-
-	
-
-	public int getoId() {
-		return oId;
-	}
-
-	public void setoId(int oId) {
-		this.oId = oId;
-	}
-
-	public String getoName() {
-		return oName;
-	}
-
-	public void setoName(String oName) {
-		this.oName = oName;
-	}
-
-	public double getoPrice() {
-		return oPrice;
-	}
-
-	public void setoPrice(double oPrice) {
-		this.oPrice = oPrice;
-	}
-
-	public int getoQuantity() {
-		return oQuantity;
-	}
-
-	public void setoQuantity(int oQuantity) {
-		this.oQuantity = oQuantity;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-
-	public double getTotalAmmout() {
-		return totalAmmout;
-	}
-
-	public void setTotalAmmout(double totalAmmout) {
-		this.totalAmmout = totalAmmout;
-	}
-
-	@Override
-	public String toString() {
-		return "Orders [oId=" + oId + ", oName=" + oName + ", oPrice=" + oPrice + ", oQuantity=" + oQuantity
-				+ ", orderDate=" + orderDate + ", totalAmmout=" + totalAmmout + ", user=" + user + "]";
-	}
-
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Orders {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+    
+    @Column(nullable = false)
+    private Integer quantity;
+    
+    @Column(nullable = false)
+    private Double totalPrice;
+    
+    @Column(nullable = false)
+    private String status = "PENDING"; // PENDING, PAYMENT_PENDING, CONFIRMED, PREPARING, DELIVERED, CANCELLED
+    
+    @Column(nullable = false)
+    private String deliveryAddress;
+    
+    private String phoneNumber;
+    
+    @Column(nullable = false)
+    private String paymentMethod = "ONLINE"; // ONLINE, COD
+    
+    @Column(nullable = false)
+    private String paymentStatus = "PENDING"; // PENDING, COMPLETED, FAILED
+    
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime orderDate = LocalDateTime.now();
+    
+    private LocalDateTime deliveredDate;
+    
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 }

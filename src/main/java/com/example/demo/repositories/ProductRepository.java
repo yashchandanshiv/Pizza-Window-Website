@@ -1,12 +1,13 @@
 package com.example.demo.repositories;
 
-
-import org.springframework.data.repository.CrudRepository;
-
 import com.example.demo.entities.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
 
-public interface ProductRepository extends CrudRepository<Product,Integer>
-{
-	public Product findByPname(String name);
-
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    List<Product> findByCategory(String category);
+    List<Product> findByAvailable(Boolean available);
+    List<Product> findByNameContainingIgnoreCase(String name);
 }

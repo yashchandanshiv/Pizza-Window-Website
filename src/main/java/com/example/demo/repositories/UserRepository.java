@@ -1,11 +1,12 @@
 package com.example.demo.repositories;
 
-import org.springframework.data.repository.CrudRepository;
-
-import com.example.demo.entities.Admin;
 import com.example.demo.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User,Integer>
-{
-public User findUserByUemail(String email);
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
 }

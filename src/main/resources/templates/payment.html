@@ -1,0 +1,175 @@
+<script>
+  document
+    .getElementById("checkoutForm")
+    ?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const deliveryAddress = document.getElementById("address").value;
+      const phoneNumber = document.getElementById("phone").value;
+      const paymentMethod = document.getElementById("paymentMethod").value;
+
+      await placeOrderFromCart(deliveryAddress, phoneNumber, paymentMethod);
+    });
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment - Pizza Window</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+      }
+      .payment-btn {
+        background-color: #528ff0;
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .payment-btn:hover {
+        background-color: #3b7dd6;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Complete Your Payment</h1>
+    <div id="order-details">
+      <p>Order ID: <span id="orderId"></span></p>
+      <p>Amount: ₹<span id="amount"></span></p>
+    </div>
+    <button class="payment-btn" onclick="initiatePayment()">Pay Now</button>
+
+    <script>
+      const API_URL = "http://localhost:8080/api";
+      const orderId = 1; // Replace with actual order ID
+
+      // Initialize payment
+      async function initiatePayment() {
+        try {
+          const response = await fetch(`${API_URL}/payment/create-order`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ orderId: orderId }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            openRazorpayCheckout(data);
+          } else {
+            alert("Payment initiation failed: " + data.message);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Payment initiation failed");
+        }
+      }
+
+      // Open Razorpay checkout
+      function openRazorpayCheckout(orderData) {
+        const options = {
+          key: orderData.keyId,
+          amount: orderData.amount,
+          currency: orderData.currency,
+          name: "Pizza Window",
+          description: "Food Order Payment",
+          order_id: orderData.orderId,
+          handler: function (response) {
+            verifyPayment(response);
+          },
+          prefill: {
+            name: "Customer Name",
+            email: "customer@example.com",
+            contact: "9999999999",
+          },
+          theme: {
+            color: "#528FF0",
+          },
+          modal: {
+            ondismiss: function () {
+              handlePaymentFailure(
+                orderData.orderId,
+                "Payment cancelled by user"
+              );
+            },
+          },
+        };
+
+        const rzp = new Razorpay(options);
+
+        rzp.on("payment.failed", function (response) {
+          handlePaymentFailure(orderData.orderId, response.error.description);
+        });
+
+        rzp.open();
+      }
+
+      // Verify payment
+      async function verifyPayment(response) {
+        try {
+          const verifyResponse = await fetch(`${API_URL}/payment/verify`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          });
+
+          const data = await verifyResponse.json();
+
+          if (data.success) {
+            alert("Payment successful!");
+            window.location.href = "order-success.html";
+          } else {
+            alert("Payment verification failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Payment verification failed");
+        }
+      }
+
+      // Handle payment failure
+      async function handlePaymentFailure(razorpayOrderId, reason) {
+        try {
+          await fetch(`${API_URL}/payment/failure`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              razorpay_order_id: razorpayOrderId,
+              reason: reason,
+            }),
+          });
+
+          alert("Payment failed: " + reason);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    </script>
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- API Script -->
+    <script src="/api.js"></script>
+  </body>
+</html>

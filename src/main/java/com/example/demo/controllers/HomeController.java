@@ -1,50 +1,37 @@
 package com.example.demo.controllers;
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.entities.Product;
-import com.example.demo.loginCredentials.AdminLogin;
-import com.example.demo.services.ProductServices;
+import java.util.HashMap;
+import java.util.Map;
 
-@Controller
-public class HomeController 
-{
-	@Autowired
-	private ProductServices productServices;
-	@GetMapping(value = {"/home", "/"})
-	public String home()
-	{
-		return "Home";
-	}
+@RestController
+@CrossOrigin(origins = "*")
+public class HomeController {
 
-	@GetMapping("/products")
-	public String products( Model model)
-	{ 
-		List<Product> allProducts = this.productServices.getAllProducts();
-		model.addAttribute("products", allProducts);
-		return "Products";
-	}
+    // @GetMapping("/")
+    // public ResponseEntity<Map<String, String>> root() {
+    //     Map<String, String> response = new HashMap<>();
+    //     response.put("message", "Welcome to Pizza Window - Food Frenzy API");
+    //     response.put("status", "Server is running");
+    //     response.put("documentation", "API endpoints available at /api/*");
+    //     return ResponseEntity.ok(response);
+    // }
 
-	@GetMapping("/location")
-	public String location()
-	{
-		return "Locate_us";
-	}
+    @GetMapping("/api/home")
+    public ResponseEntity<Map<String, String>> home() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Welcome to Pizza Window - Food Frenzy API");
+        response.put("status", "API is running successfully");
+        return ResponseEntity.ok(response);
+    }
 
-	@GetMapping("/about")
-	public String about()
-	{
-		return "About";
-	}
-
-	@GetMapping("/login")
-	public String login(Model model)
-	{
-		model.addAttribute("adminLogin",new AdminLogin());
-		return "Login";
-	}
+    @GetMapping("/api/home/health")
+    public ResponseEntity<Map<String, String>> healthCheck() {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "UP");
+        response.put("message", "Application is healthy");
+        return ResponseEntity.ok(response);
+    }
 }

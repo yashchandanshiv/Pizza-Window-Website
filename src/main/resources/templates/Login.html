@@ -1,251 +1,444 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Pizza Window - Login</title>
-    <link rel="icon" type="image/x-icon" href="./Images/logo.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    />
-    <link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
-    <style>
-      /* Base styles from home.html */
-      * {
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Pizza Window</title>
+  <style>
+    * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        /* Full-screen hero gradient from home.html */
-        background: linear-gradient(
-          135deg,
-          rgba(255, 107, 107, 0.9) 0%,
-          rgba(255, 159, 64, 0.85) 50%,
-          rgba(255, 205, 86, 0.8) 100%
-        );
-        background-attachment: fixed;
-        overflow-x: hidden;
-        padding-top: 80px; /* Space for fixed navbar */
-      }
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-      /* ================================== */
-      /* === NAVBAR OVERRIDE STYLES === */
-      /* ================================== */
-      nav {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        /* Transparent gradient to blend with body */
-        background: linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.5),
-          transparent
-        ) !important;
-        z-index: 1000;
-        padding: 15px 5% !important;
-        box-sizing: border-box !important;
-        box-shadow: none !important;
-      }
-      nav a,
-      nav a:visited {
-        color: #ffffff !important;
-        font-weight: 500 !important;
-      }
-      nav a.logo {
-        font-size: 1.8rem !important;
-        font-weight: bold !important;
-      }
-      nav a.login-btn {
-        border: 1px solid #ffffff !important;
-        padding: 8px 20px !important;
-        border-radius: 20px !important;
-      }
-      nav a.login-btn:hover {
-        background-color: #ffffff !important;
-        color: #ff6b6b !important;
-      }
+    body {
+        background: linear-gradient(135deg, #FFB88C 0%, #DE6262 100%);
+        min-height: 100vh;
+    }
 
-      /* ================================== */
-      /* === LOGIN CONTAINER STYLES === */
-      /* ================================== */
-      .LoginContainer {
+    /* Navbar Styles */
+    .navbar {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+        padding: 15px 50px;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap; /* Allow cards to stack on small screens */
-        gap: 40px;
-        padding: 40px 20px;
-        min-height: calc(100vh - 80px); /* Fill screen below navbar */
-      }
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
 
-      /* Login Card Styles */
-      .admin,
-      .user {
-        background: white;
+    .logo a {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.3s;
+        font-size: 16px;
+    }
+
+    .nav-links a:hover {
+        opacity: 0.8;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: white;
+    }
+
+    .user-email {
+        font-weight: 600;
+        color: white;
+    }
+
+    .logout-btn {
+        background: rgba(255,255,255,0.2);
+        padding: 8px 20px;
         border-radius: 20px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        width: 100%;
-        max-width: 450px; /* Max width for login forms */
-        transition: transform 0.3s ease;
-        box-sizing: border-box;
-      }
-      .admin:hover,
-      .user:hover {
-        transform: translateY(-5px);
-      }
+        cursor: pointer;
+        border: 1px solid white;
+        transition: background 0.3s;
+        color: white !important;
+    }
 
-      .content {
+    .logout-btn:hover {
+        background: rgba(255,255,255,0.3);
+    }
+
+    /* Login Container */
+    .login-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 60px);
+        padding: 40px 20px;
+    }
+
+    .login-container {
+        background: white;
         padding: 40px;
-      }
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        width: 100%;
+        max-width: 450px;
+    }
 
-      /* Form Heading */
-      .content h2 {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #333;
+    .login-header {
         text-align: center;
         margin-bottom: 30px;
-      }
-      .content h2 span {
-        color: #ff6b6b; /* Changed from green to brand red */
-      }
-      .content strong {
-        text-align: center;
-        display: block;
-        color: #888;
-        margin-bottom: 5px;
-      }
+    }
 
-      /* Form Styling */
-      form {
+    .logo-circle {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+        border-radius: 50%;
         display: flex;
-        flex-direction: column;
-      }
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 40px;
+    }
 
-      form b {
+    .login-header h1 {
+        color: #333;
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .login-header p {
+        color: #666;
+        font-size: 16px;
+    }
+
+    .toggle-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+
+    .toggle-btn {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid #FF6B6B;
+        background: white;
+        color: #FF6B6B;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
         font-weight: 600;
-        color: #555;
-        margin-bottom: 5px;
-        margin-top: 10px;
-      }
+        transition: all 0.3s;
+    }
 
-      form input[type="email"],
-      form input[type="password"] {
+    .toggle-btn.active {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+        color: white;
+        border-color: #FF6B6B;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #FF6B6B;
+    }
+
+    .submit-btn {
         width: 100%;
         padding: 14px;
-        font-size: 1rem;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-sizing: border-box;
-      }
-
-      form small {
-        text-align: center;
-        margin-top: 10px;
-        min-height: 1.2em; /* Prevents layout shift */
-      }
-
-      /* Button Style (from home.html) */
-      .loginButton {
-        padding: 15px 40px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 50px;
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
         color: white;
-        margin-top: 10px;
-      }
-      .loginButton:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
-      }
-
-      /* Register Link */
-      form p {
-        text-align: center;
-        color: #666;
-        margin-top: 20px;
-      }
-      form p a {
-        color: #ff6b6b; /* Changed from green to brand red */
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
         font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .error-message {
+        background: #ffebee;
+        color: #c62828;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: none;
+    }
+
+    .success-message {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: none;
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 20px;
+        color: #666;
+    }
+
+    .register-link a {
+        color: #FF6B6B;
         text-decoration: none;
-      }
-      form p a:hover {
+        font-weight: 600;
+    }
+
+    .register-link a:hover {
         text-decoration: underline;
-      }
-    </style>
-  </head>
+    }
 
-  <body>
-    <nav th:replace="~{Navigation::navbar}"></nav>
+    /* Responsive */
+    @media (max-width: 768px) {
+        .navbar {
+            flex-direction: column;
+            padding: 15px 20px;
+        }
 
-    <div class="LoginContainer">
-      <div class="admin">
-        <div class="content">
-          <strong style="font-size: 16px; margin-bottom: 0px">BUSINESS</strong>
-          <h2>For <span>Admins</span></h2>
+        .nav-links {
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-          <form th:action="@{/adminLogin}" method="post">
-            <b>Email :</b>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter email..."
-              class="email"
-            />
-            <b>Password:</b>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              class="password"
-            />
-            <small style="color: red" th:text="${error}"></small>
-            <button type="submit" class="loginButton">Log in</button>
-          </form>
-        </div>
-      </div>
+        .login-container {
+            padding: 30px 20px;
+        }
 
-      <div class="user">
-        <div class="content">
-          <h2>For <span>Users</span></h2>
-          <form th:action="@{/userLogin}" method="post" class="form">
-            <b>Email :</b>
-            <input type="email" name="userEmail" placeholder="Enter email" />
+        .login-header h1 {
+            font-size: 28px;
+        }
+    }
+  </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <div class="logo">
+    <a href="/">🍕 Pizza Window</a>
+  </div>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/products">Menu</a>
+    <a href="/locate">Location</a>
+    <a href="/about">About</a>
 
-            <b>Password:</b>
-            <input
-              type="password"
-              name="userPassword"
-              placeholder="Enter password"
-              required
-              maxlength="8"
-              minlength="4"
-              class="userPassword"
-            />
-
-            <small style="color: red" th:text="${error2}"></small>
-            <button type="submit" class="loginButton">Log in</button>
-
-            <p>
-              I don't have an account?
-              <a href="register.html" th:href="@{/register}">Register Here</a>
-            </p>
-          </form>
-        </div>
-      </div>
+    <!-- User Info (shown when logged in) -->
+    <div class="user-info" id="userInfo" style="display: none;">
+      <span class="user-email" id="userEmail"></span>
+      <a href="javascript:void(0)" class="logout-btn" onclick="handleLogout()">Logout</a>
     </div>
-  </body>
+
+    <!-- Login Link (shown when not logged in) -->
+    <a href="/login" id="loginLink" style="display: block;">Login</a>
+  </div>
+</div>
+
+<!-- Login Wrapper -->
+<div class="login-wrapper">
+  <div class="login-container">
+    <div class="login-header">
+      <div class="logo-circle">🍕</div>
+      <h1>Welcome Back!</h1>
+      <p>Login to order your favorite pizzas</p>
+    </div>
+
+    <div class="toggle-buttons">
+      <button class="toggle-btn active" id="userBtn">User Login</button>
+      <button class="toggle-btn" id="adminBtn">Admin Login</button>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+    <div class="success-message" id="successMessage"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required placeholder="Enter your password">
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Login</button>
+    </form>
+
+    <div class="register-link">
+      Don't have an account? <a href="/register">Register here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  let isAdmin = false;
+
+  const userBtn = document.getElementById('userBtn');
+  const adminBtn = document.getElementById('adminBtn');
+  const loginForm = document.getElementById('loginForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMessage = document.getElementById('errorMessage');
+  const successMessage = document.getElementById('successMessage');
+
+  // Check login status and update navbar
+  function checkLoginStatus() {
+      const token = localStorage.getItem('token');
+      const email = localStorage.getItem('email');
+
+      const userInfo = document.getElementById('userInfo');
+      const loginLink = document.getElementById('loginLink');
+      const userEmail = document.getElementById('userEmail');
+
+      if (token && email) {
+          if (userInfo) userInfo.style.display = 'flex';
+          if (loginLink) loginLink.style.display = 'none';
+          if (userEmail) userEmail.textContent = email;
+      } else {
+          if (userInfo) userInfo.style.display = 'none';
+          if (loginLink) loginLink.style.display = 'block';
+      }
+  }
+
+  function handleLogout() {
+      localStorage.clear();
+      alert('Logged out successfully!');
+      window.location.href = '/';
+  }
+
+  // Toggle between User and Admin
+  userBtn.addEventListener('click', () => {
+      isAdmin = false;
+      userBtn.classList.add('active');
+      adminBtn.classList.remove('active');
+      hideMessages();
+  });
+
+  adminBtn.addEventListener('click', () => {
+      isAdmin = true;
+      adminBtn.classList.add('active');
+      userBtn.classList.remove('active');
+      hideMessages();
+  });
+
+  // Handle form submission
+  loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      hideMessages();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Logging in...';
+
+      const endpoint = isAdmin ? '/api/admin/login' : '/api/users/login';
+
+      try {
+          const response = await fetch(endpoint, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ email, password })
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.success) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('email', email);
+    localStorage.setItem('role', isAdmin ? 'ADMIN' : 'USER');
+    showSuccess('Login successful! Redirecting...');
+    setTimeout(() => {
+        if (isAdmin) {
+            window.location.href = '/admin-dashboard';
+        } else {
+            window.location.href = '/products';
+        }
+    }, 1500);
+} else {
+    showError(data.message || 'Invalid email or password');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Login';
+}
+      } catch (error) {
+          showError('Connection error. Please try again.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Login';
+      }
+  });
+
+  function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+  }
+
+  function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.style.display = 'block';
+  }
+
+  function hideMessages() {
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+  }
+
+  // Check if already logged in
+  if (localStorage.getItem('token')) {
+      const role = localStorage.getItem('role');
+      if (role === 'ADMIN') {
+          window.location.href = '/admin-dashboard';
+      } else {
+          window.location.href = '/products';
+      }
+  }
+
+  // Initialize navbar
+  checkLoginStatus();
+</script>
+</body>
 </html>

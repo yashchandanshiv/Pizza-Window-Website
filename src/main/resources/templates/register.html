@@ -1,105 +1,170 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>TEA : REGISTER</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Pizza Window</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #FFB88C 0%, #DE6262 100%);
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .navbar {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+      padding: 15px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .logo a { color: white; font-size: 28px; font-weight: bold; text-decoration: none;}
+    .nav-links { display: flex; gap: 30px; align-items: center;}
+    .nav-links a { color: white; text-decoration: none; font-weight: 500; transition: opacity 0.3s; }
+    .nav-links a:hover { opacity: 0.8; }
 
-        .RegistrationContainer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .registration {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            padding: 20px;
-        }
-
-        .registration h2 {
-            text-align: center;
-            color: #333;
-        }
-
-        .registration label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        .registration input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .registration button {
-            background-color: #4caf50;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .registration button:hover {
-            background-color: #45a049;
-        }
-
-        .registration p {
-            margin-top: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #ff0000;
-        }
-    </style>
+    .register-wrapper {
+      display: flex; align-items: center; justify-content: center;
+      min-height: calc(100vh - 70px);
+    }
+    .register-container {
+      background: white;
+      padding: 40px 30px 30px 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%; max-width: 440px;
+    }
+    .register-header { text-align: center; margin-bottom: 25px; }
+    .logo-circle {
+      width: 75px; height: 75px;
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center; justify-content: center;
+      font-size: 36px; margin: 0 auto 12px;
+    }
+    .register-header h1 { color: #333; font-size: 28px; margin-bottom: 7px; }
+    .register-header p { color: #666; font-size: 16px; }
+    .form-group { margin-bottom: 20px;}
+    .form-group label { display: block; margin-bottom: 7px; color: #333; font-weight: 600;}
+    .form-group input {
+      width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px;
+      font-size: 16px; transition: border-color 0.3s;
+    }
+    .form-group input:focus {outline: none; border-color: #FF6B6B;}
+    .submit-btn {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+      color: white; border: none; border-radius: 10px;
+      font-size: 18px; font-weight: 600; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,107,107,0.4);}
+    .error-message, .success-message {
+      padding: 12px; border-radius: 10px; margin-bottom: 20px; display: none;
+    }
+    .error-message { background: #ffebee; color: #c62828; }
+    .success-message { background: #e8f5e9; color: #2e7d32; }
+    .login-link { text-align: center; margin-top: 20px; color: #666; }
+    .login-link a { color: #FF6B6B; text-decoration: none; font-weight: 600; }
+    .login-link a:hover { text-decoration: underline; }
+    @media (max-width: 500px) { .register-container { padding: 20px 7px; } }
+  </style>
 </head>
-
 <body>
-    <div class="RegistrationContainer">
-        <div class="registration">
-            <div class="content">
-                <h2>Register</h2>
-
-            <form th:action="@{/register}" method="get" th:object="${userRegistration}">
-				    <label for="u_id">UserID:</label>
-                    <input type="text" id="u_id" name="u_id" th:field="*{u_id}" required><br>
-                    
-                    <label for="uemail">Email:</label>
-                    <input type="email" id="uemail" name="uemail" th:field="*{uemail}" required><br>
-
-                    <label for="uname">Username:</label>
-                    <input type="text" id="uname" name="uname" th:field="*{uname}" required><br>
-
-                    <label for="unumber">Phone Number:</label>
-                    <input type="text" id="unumber" name="unumber" th:field="*{unumber}" required><br>
-
-                    <label for="upassword">Password:</label>
-                    <input type="password" id="upassword" name="upassword" th:field="*{upassword}" required><br>
-
-                    <button type="submit">Register</button>
-                </form>
-
-
-                <p th:text="${error}" style="color: red;"></p>
-            </div>
-        </div>
+<div class="navbar">
+  <div class="logo"><a href="/">🍕 Pizza Window</a></div>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/products">Menu</a>
+    <a href="/locate">Location</a>
+    <a href="/about">About</a>
+    <a href="/login">Login</a>
+  </div>
+</div>
+<div class="register-wrapper">
+  <div class="register-container">
+    <div class="register-header">
+      <div class="logo-circle">🍕</div>
+      <h1>Create Account</h1>
+      <p>Sign up to order delicious pizzas!</p>
     </div>
-</body>
+    <div class="error-message" id="errorMessage"></div>
+    <div class="success-message" id="successMessage"></div>
+    <form id="registerForm" autocomplete="off">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email address">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" name="phone" required placeholder="Enter your phone number">
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" required placeholder="Enter your delivery address">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required placeholder="Create a password" minlength="6">
+      </div>
+      <button type="submit" class="submit-btn">Register</button>
+    </form>
+    <div class="login-link">
+      Already have an account? <a href="/login">Login here</a>
+    </div>
+  </div>
+</div>
+<script>
+  const registerForm = document.getElementById('registerForm');
+  const errorMessage = document.getElementById('errorMessage');
+  const successMessage = document.getElementById('successMessage');
 
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMessage.style.display = 'none';
+    successMessage.style.display = 'none';
+
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (password.length < 6) {
+      errorMessage.style.display = 'block';
+      errorMessage.textContent = 'Password must be at least 6 characters long.';
+      return;
+    }
+
+    const bodyData = { fullName, email, phone, address, password };
+
+    try {
+      const response = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bodyData)
+      });
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        successMessage.style.display = 'block';
+        successMessage.textContent = 'Registered successfully! Redirecting to login...';
+        setTimeout(() => window.location.href = '/login', 2000);
+      } else {
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = data.message || 'Registration failed! Try again.';
+      }
+    } catch (err) {
+      errorMessage.style.display = 'block';
+      errorMessage.textContent = 'Could not connect to server!';
+    }
+  });
+</script>
+</body>
 </html>

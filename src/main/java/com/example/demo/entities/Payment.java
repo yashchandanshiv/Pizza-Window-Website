@@ -7,36 +7,42 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "products")
+@Table(name = "payments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Payment {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false)
-    private String name;
-    
-    @Column(length = 1000)
-    private String description;
+    @OneToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Orders order;
     
     @Column(nullable = false)
-    private Double price;
+    private String razorpayOrderId;
+    
+    private String razorpayPaymentId;
+    
+    private String razorpaySignature;
     
     @Column(nullable = false)
-    private String category;
-    
-    private String imageUrl;
+    private Double amount;
     
     @Column(nullable = false)
-    private Boolean available = true;
+    private String currency = "INR";
     
     @Column(nullable = false)
-    private Integer stock = 0;
+    private String status = "CREATED"; // CREATED, PAID, FAILED
+    
+    private String paymentMethod; // card, netbanking, upi, wallet
     
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+    
+    private LocalDateTime paidAt;
+    
+    private String failureReason;
 }

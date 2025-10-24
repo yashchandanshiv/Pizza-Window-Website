@@ -1,1131 +1,394 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FoodFrenzy - Menu</title>
-    <link rel="icon" type="image/x-icon" href="./Images/logo.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    />
-    <link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
-
-    <style>
-      /* Base styles from home.html */
-      * {
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu - Pizza Window</title>
+  <style>
+    * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #f8f9fa; /* Standard light grey background */
-        overflow-x: hidden;
-        padding-top: 80px; /* Space for fixed navbar */
-      }
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-      /* ================================== */
-      /* === NAVBAR OVERRIDE STYLES === */
-      /* ================================== */
-      nav {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        background: linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.5),
-          transparent
-        ) !important;
-        z-index: 1000;
-        padding: 15px 5% !important;
-        box-sizing: border-box !important;
-        box-shadow: none !important;
-      }
-      nav a,
-      nav a:visited {
-        color: #ffffff !important;
-        font-weight: 500 !important;
-      }
-      nav a.logo {
-        /* Assuming your logo is <a class="logo">...</a> */
-        font-size: 1.8rem !important;
-        font-weight: bold !important;
-      }
-      nav a.login-btn {
-        /* Assuming login is <a class="login-btn">...</a> */
-        border: 1px solid #ffffff !important;
-        padding: 8px 20px !important;
-        border-radius: 20px !important;
-      }
-      nav a.login-btn:hover {
-        background-color: #ffffff !important;
-        color: #ff6b6b !important;
-      }
+    body {
+        background: linear-gradient(135deg, #FFB88C 0%, #DE6262 100%);
+        min-height: 100vh;
+    }
 
-      /* ================================== */
-      /* === MENU SECTION STYLES === */
-      /* ================================== */
-      .menu-page-section {
-        padding: 60px 20px; /* Reduced padding from 100px */
-      }
-      .section-container {
-        max-width: 900px;
-        margin: 0 auto;
-      }
-      .section-title {
-        text-align: center;
-        font-size: 3rem;
-        color: #ff6b6b;
-        margin-bottom: 20px;
-        font-weight: 800;
-      }
-      .section-subtitle {
-        text-align: center;
-        font-size: 1.2rem;
-        color: #666;
-        margin-bottom: 60px;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      /* Category Heading */
-      .category-title {
-        text-align: center;
-        font-size: 2.2rem;
-        color: #333;
-        margin-top: 40px;
-        margin-bottom: 30px;
-        border-bottom: 3px solid #ffa94d;
-        padding-bottom: 10px;
-        display: inline-block;
-        left: 50%;
-        position: relative;
-        transform: translateX(-50%);
-      }
-
-      /* Restyled Item Card */
-      .item-card {
+    /* Navbar Styles */
+    .navbar {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+        padding: 15px 50px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: white;
-        border-radius: 20px; /* Matching home.html cards */
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        padding: 20px 25px;
-        margin-bottom: 15px;
-      }
-      .item-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-      }
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
 
-      .item-details {
+    .logo a {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .nav-links {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin-right: 15px;
-      }
-      .item-name {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: #333;
-        margin: 0;
-      }
-      .item-description {
-        font-size: 0.9rem;
-        color: #777;
-        margin: 0;
-        font-style: italic;
-      }
+        gap: 30px;
+        align-items: center;
+    }
 
-      .item-purchase {
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.3s;
+        font-size: 16px;
+    }
+
+    .nav-links a:hover {
+        opacity: 0.8;
+    }
+
+    .user-info {
         display: flex;
         align-items: center;
-        gap: 25px;
-        flex-shrink: 0;
-      }
-      .item-price {
-        font-size: 1.3rem;
-        color: #ff6b6b;
-        font-weight: 700;
-        margin: 0;
-        width: 100px; /* Keep prices aligned */
-        text-align: right;
-      }
-
-      /* Restyled Button to match home.html */
-      .btn {
-        padding: 12px 25px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 50px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-      }
-      .btn-primary {
-        background: linear-gradient(135deg, #ff6b6b, #ffa94d);
-        color: white;
-      }
-      .btn-primary:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
-      }
-
-      /* ================================== */
-      /* === FOOTER (from home.html) === */
-      /* ================================== */
-      .footer {
-        background: #2c2c2c;
-        color: white;
-        padding: 60px 20px 30px;
-        position: relative;
-        margin-top: 100px; /* Space above footer */
-      }
-      .footer-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 40px;
-        max-width: 1200px;
-        margin: 0 auto 40px;
-      }
-      .footer-column h3 {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-        color: #ffa94d;
-      }
-      .footer-column p,
-      .footer-column a {
-        color: #ccc;
-        line-height: 2;
-        text-decoration: none;
-        display: block;
-        transition: color 0.3s ease;
-      }
-      .footer-column a:hover {
-        color: #ffa94d;
-      }
-      .social-links {
-        display: flex;
         gap: 15px;
-        margin-top: 20px;
-      }
-      .social-links a {
-        width: 40px;
-        height: 40px;
-        background: #444;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        transition: all 0.3s ease;
-      }
-      .social-links a:hover {
-        background: #ffa94d;
-        transform: translateY(-3px);
-      }
-      .footer-bottom {
+        color: white;
+    }
+
+    .user-email {
+        font-weight: 600;
+        color: white;
+    }
+
+    .logout-btn {
+        background: rgba(255,255,255,0.2);
+        padding: 8px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        border: 1px solid white;
+        transition: background 0.3s;
+        color: white !important;
+    }
+
+    .logout-btn:hover {
+        background: rgba(255,255,255,0.3);
+    }
+
+    /* Page Header */
+    .page-header {
         text-align: center;
-        padding-top: 30px;
-        border-top: 1px solid #444;
-        color: #999;
+        padding: 60px 20px 40px;
+        color: white;
+    }
+
+    .page-header h1 {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .page-header p {
+        font-size: 20px;
+        opacity: 0.95;
+    }
+
+    /* Products Container */
+    .products-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #FFE5D4 0%, #FFD1B8 100%);
+    }
+
+    .product-info {
+        padding: 25px;
+    }
+
+    .product-name {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        font-size: 15px;
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .product-price {
+        font-size: 28px;
+        font-weight: bold;
+        color: #FF6B6B;
+    }
+
+    .add-to-cart-btn {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .add-to-cart-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .category-badge {
+        display: inline-block;
+        background: rgba(255, 107, 107, 0.1);
+        color: #FF6B6B;
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .stock-badge {
+        display: inline-block;
+        background: rgba(76, 175, 80, 0.1);
+        color: #4CAF50;
+        padding: 5px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 10px;
+    }
+
+    .out-of-stock {
+        background: rgba(244, 67, 54, 0.1);
+        color: #F44336;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: white;
+    }
+
+    .empty-state h2 {
+        font-size: 32px;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 18px;
+        opacity: 0.9;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 60px;
+        color: white;
+        font-size: 24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .navbar {
+            flex-direction: column;
+            padding: 15px 20px;
+        }
+
+        .nav-links {
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+        }
+
+        .products-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+  </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <div class="logo">
+    <a href="/">🍕 Pizza Window</a>
+  </div>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/products">Menu</a>
+    <a href="/locate">Location</a>
+    <a href="/about">About</a>
+
+    <!-- User Info (shown when logged in) -->
+    <div class="user-info" id="userInfo" style="display: none;">
+      <span class="user-email" id="userEmail"></span>
+      <a href="javascript:void(0)" class="logout-btn" onclick="handleLogout()">Logout</a>
+    </div>
+
+    <!-- Login Link (shown when not logged in) -->
+    <a href="/login" id="loginLink" style="display: block;">Login</a>
+  </div>
+</div>
+
+<!-- Page Header -->
+<div class="page-header">
+  <h1>🍕 Our Delicious Menu</h1>
+  <p>Explore our wide range of pizzas and treats!</p>
+</div>
+
+<!-- Products Container -->
+<div class="products-container">
+  <div class="loading" id="loading">Loading delicious pizzas...</div>
+
+  <div class="products-grid" id="productsGrid" style="display: none;">
+    <!-- Products will be loaded here -->
+  </div>
+
+  <div class="empty-state" id="emptyState" style="display: none;">
+    <h2>No Products Available</h2>
+    <p>Check back soon for delicious pizzas!</p>
+  </div>
+</div>
+
+<script>
+  // Check login status and update navbar
+  function checkLoginStatus() {
+      const token = localStorage.getItem('token');
+      const email = localStorage.getItem('email');
+
+      const userInfo = document.getElementById('userInfo');
+      const loginLink = document.getElementById('loginLink');
+      const userEmail = document.getElementById('userEmail');
+
+      if (token && email) {
+          // Logged in
+          if (userInfo) userInfo.style.display = 'flex';
+          if (loginLink) loginLink.style.display = 'none';
+          if (userEmail) userEmail.textContent = email;
+      } else {
+          // Not logged in
+          if (userInfo) userInfo.style.display = 'none';
+          if (loginLink) loginLink.style.display = 'block';
       }
-    </style>
-  </head>
+  }
 
-  <body>
-    <nav th:replace="~{Navigation::navbar()}"></nav>
+  function handleLogout() {
+      localStorage.clear();
+      alert('Logged out successfully!');
+      window.location.href = '/';
+  }
 
-    <section class="menu-page-section">
-      <div class="section-container">
-        <h2 class="section-title">Our Menu</h2>
-        <p class="section-subtitle">
-          Explore our wide selection of delicious, freshly prepared dishes.
-        </p>
+  // Fetch products from API
+  async function loadProducts() {
+      const loading = document.getElementById('loading');
+      const productsGrid = document.getElementById('productsGrid');
+      const emptyState = document.getElementById('emptyState');
 
-        <div id="menu-list">
-          <h2 class="category-title">Delicious Pizzas</h2>
+      try {
+          const response = await fetch('/api/products/all');
+          const products = await response.json();
 
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Double Cheese Margherita</p>
-              <p class="item-description">( Leaded Cheese & Tomatoes )</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 119</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Paneer Tikka</p>
-              <p class="item-description">
-                ( Paneer, Capsicum, Onion, Cheese )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 119</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Hot & Spicy</p>
-              <p class="item-description">
-                ( Hot & spicy pizza with Onion, Green chilly & Red Paprika,
-                Capsicum, Spicy Jalapeno )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 119</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Spicy Veg</p>
-              <p class="item-description">
-                ( Spiciest Veg pizza with Jalapeno, Green chilly & Red Paprika
-                loaded with Schezwan sauce &... )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Paneer Makhani</p>
-              <p class="item-description">
-                ( Combination of Paneer, Makhani gravy with Cheese, Onion &
-                Capsicum topped with... )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Schezwan Paneer</p>
-              <p class="item-description">
-                ( Paneer loaded with Schezwan sauce with Cheese, Onion &
-                Capsicum )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Paneer Peri Peri</p>
-              <p class="item-description">
-                ( Paneer, Onion, Capsicum, cheese, onion, topped with peri peri
-                )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Supreme Veggie</p>
-              <p class="item-description">
-                ( Black Olives, Onion, Crisp Capsicum, Mushroom, golden corn,
-                tomatoes )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Veggie Barbeque</p>
-              <p class="item-description">
-                ( Onion, Crisp Capsicum, Mushroom topped with Barbeque sauce )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 139</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Tandoori Paneer</p>
-              <p class="item-description">
-                ( Paneer marinated in tandoori sauce with Cheese, Onion,
-                Capsicum & Red Paprika )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 139</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Deluxe Veggie</p>
-              <p class="item-description">
-                ( Combination of Paneer, Mushroom, Onion, Capsicum, Tomatoes &
-                Olives )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 139</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Thousand Island</p>
-              <p class="item-description">
-                ( Delicious combination of Onion, Capsicum, Tomatoes topped with
-                thousand island sauce )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 139</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Window's Farm</p>
-              <p class="item-description">
-                ( Farm fresh combination of Baby Corn, Black Olives, Onion,
-                Capsicum, Red Paprika )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 149</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Thousand Island Paneer</p>
-              <p class="item-description">
-                ( Combination of Paneer, Onion, Capsicum, Tomatoes with Cheese,
-                topped with... )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 149</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
+          loading.style.display = 'none';
 
-          <h2 class="category-title">Special Pizza</h2>
+          if (products && products.length > 0) {
+              productsGrid.style.display = 'grid';
+              productsGrid.innerHTML = products.map(product => `
+                  <div class="product-card">
+                      <img src="${product.imageUrl || 'https://via.placeholder.com/400x250/FFB88C/ffffff?text=Pizza'}"
+                           alt="${product.name}"
+                           class="product-image"
+                           onerror="this.src='https://via.placeholder.com/400x250/FFB88C/ffffff?text=Pizza'">
+                      <div class="product-info">
+                          <div>
+                              <span class="category-badge">${product.category}</span>
+                              ${product.available && product.stock > 0
+                                  ? `<span class="stock-badge">${product.stock} available</span>`
+                                  : `<span class="stock-badge out-of-stock">Out of Stock</span>`}
+                          </div>
+                          <h3 class="product-name">${product.name}</h3>
+                          <p class="product-description">${product.description}</p>
+                          <div class="product-footer">
+                              <span class="product-price">₹${product.price.toFixed(2)}</span>
+                              <button class="add-to-cart-btn"
+                                      onclick="addToCart(${product.id})"
+                                      ${!product.available || product.stock === 0 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                  ${product.available && product.stock > 0 ? 'Add to Cart' : 'Sold Out'}
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              `).join('');
+          } else {
+              emptyState.style.display = 'block';
+          }
+      } catch (error) {
+          console.error('Error loading products:', error);
+          loading.innerHTML = '<h2>Failed to load products. Please try again.</h2>';
+      }
+  }
 
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">The Pizza Window Special</p>
-              <p class="item-description">
-                ( Cheese, Paneer, Corn, Onion, Mushroom, Capsicum, Olives,
-                Jalapenos )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 169</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
+  function addToCart(productId) {
+      const token = localStorage.getItem('token');
 
-          <h2 class="category-title">Classic Pizzas</h2>
+      if (!token) {
+          alert('Please login to add items to cart!');
+          window.location.href = '/login';
+          return;
+      }
 
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Margherita Pizza</p>
-              <p class="item-description">
-                ( A classic load of Cheese, Tomatoes )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 89</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Veggie Delight</p>
-              <p class="item-description">
-                ( Golden Corn, Tomatoes, Capsicum, Onion )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 99</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Corn & Onion</p>
-              <p class="item-description">
-                ( Best combination of Paneer & Onion )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 99</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Veggie Supreme</p>
-              <p class="item-description">
-                ( Loaded with Schezwan sauce & Cheese, capsicum )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 99</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
+      // TODO: Implement add to cart functionality
+      alert(`Product ${productId} added to cart! (Feature coming soon)`);
+  }
 
-          <h2 class="category-title">Pizza Mania</h2>
-
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Corn Pizza</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 79</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Onion Pizza</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 79</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Tomato & Onion Pizza</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 79</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Onion & Corn Pizza</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 79</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-
-          <h2 class="category-title">New Arrivals</h2>
-
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Makhani Gravy Paneer</p>
-              <p class="item-description">( Makhani gravy, onion & cheese )</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 89</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Kolhapuri Paneer</p>
-              <p class="item-description">
-                ( Kolhapuri chilly chutney, Cheese, Onion, Capsicum & Paneer )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 119</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Hawaiian Pizza</p>
-              <p class="item-description">
-                ( Nothing says hawaiian like Pineapple, Paneer, Jalapenos &
-                Cheese )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Peri Peri Paneer</p>
-              <p class="item-description">
-                ( Cheese, Pineapple, Jalapeno, Sweet corn & Red Paprika )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Mexicana Pizza</p>
-              <p class="item-description">
-                ( Black Olives, Red paprika, Tomatoes, Paneer, Capsicum, cheese
-                & Mexicana herbs )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 149</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Peri Peri Paneer Pizza</p>
-              <p class="item-description">
-                ( Mushrooms, Jalapenos, Baby corn, Capsicum, Tomatoes topped
-                with peri peri )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 149</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-
-          <h2 class="category-title">Jain Pizzas</h2>
-
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Jain Margherita Pizza</p>
-              <p class="item-description">( Cheese with Tomatoes )</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 89</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Jain Veggies Pizza</p>
-              <p class="item-description">( Tomatoes, Corn, Capsicum )</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 89</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Jain Supreme Pizza</p>
-              <p class="item-description">
-                ( Olives, Corns, Tomatoes, Jalapenos, Capsicum & Pineapple )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Jain Paneer Peri Peri Pizza</p>
-              <p class="item-description">
-                ( Tomatoes, Paneer, Capsicum topped with peri peri )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 129</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Jain Thousand Island Pizza</p>
-              <p class="item-description">
-                ( Paneer, Tomatoes, Capsicum with Thousand Island Sauce )
-              </p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 149</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-
-          <h2 class="category-title">Fries & Snacks</h2>
-
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Salted French Fries</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 70</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Peri Peri French Fries</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 75</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Peri Peri Mayonnaise</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 89</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Thousand Island Fries</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 99</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Cheezy French Fries</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 89</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Potato Cheese Shots (8 pcs)</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 89</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-
-          <h2 class="category-title">Garlic Breads</h2>
-
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Garlic Bread Sticks</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 69</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Cheezy Garlic Bread</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 79</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Stuffed Garlic Bread</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 99</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Tandoori Paneer G B</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 124</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Paneer Peri Peri G B</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 124</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-
-          <h2 class="category-title">Add On</h2>
-
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Mozzarella Cheese</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 30</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Peri Peri Dip</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 25</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Thousand Island Dip</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 25</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Jalapeno Dip</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 25</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Olives</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 25</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Mushroom</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 25</p>
-              <a href="/login" class->Add to Cart</a>
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Baby Corns</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 25</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Jalapenos</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 20</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Paneer Masala</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 05</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-
-          <h2 class="category-title">Beverages</h2>
-
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Classic Cold Coffee</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 30</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Thick Cold Coffee</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 39</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Lemon Iced Tea</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 10</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Choco chips</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 10</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Cold Drink</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 20</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Water Bottle</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 20</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-
-          <h2 class="category-title">Dessert</h2>
-
-          <div class="item-card">
-            <div class="item-details">
-              <p class="item-name">Choco Lava Cake</p>
-            </div>
-            <div class="item-purchase">
-              <p class="item-price">Rs 70</p>
-              <a href="/login" class="btn btn-primary add-to-cart-btn"
-                >Add to Cart</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div class="footer-grid">
-        <div class="footer-column">
-          <h3>Pizza Window</h3>
-          <p>
-            Bringing delicious food to your doorstep. Quality, speed, and taste
-            - that's our promise.
-          </p>
-          <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a
-              href="https://www.instagram.com/thepizzawindow_india/"
-              target="_blank"
-              ><i class="fab fa-instagram"></i
-            ></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-          </div>
-        </div>
-
-        <div class="footer-column">
-          <h3>Quick Links</h3>
-          <a href="#" th:href="@{/}">Home</a>
-          <a href="#" th:href="@{/products}">Menu</a>
-          <a href="#" th:href="@{/about}">About Us</a>
-          <a href="#" th:href="@{/location}">Contact</a>
-        </div>
-
-        <div class="footer-column">
-          <h3>Customer Service</h3>
-          <a href="#">FAQs</a>
-          <a href="#">Delivery Info</a>
-          <a href="#">Returns Policy</a>
-          <a href="#">Privacy Policy</a>
-        </div>
-
-        <div class="footer-column">
-          <h3>Contact Us</h3>
-          <p><i class="fas fa-phone"></i> +91 7020921457</p>
-          <p><i class="fas fa-envelope"></i> info@pizzawindow.com</p>
-          <p>
-            <i class="fas fa-map-marker-alt"></i> Shop No 1, Vidyanagari,
-            opposite to Jawahar Bakery, Mohan Nagar, Dhankawadi, Pune,
-            Maharashtra 411043
-          </p>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>
-          &copy; 2025 Pizza Window. All rights reserved. | Designed By Yash
-          Chandanshiv
-        </p>
-      </div>
-    </footer>
-
-    <script>
-      // UPDATED SCRIPT
-      // Now targets all buttons with the ".add-to-cart-btn" class
-      document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
-        button.addEventListener("click", function (event) {
-          event.preventDefault();
-          alert("Please Login as a User to add products to the cart");
-        });
-      });
-    </script>
-  </body>
+  // Initialize on page load
+  checkLoginStatus();
+  loadProducts();
+</script>
+</body>
 </html>

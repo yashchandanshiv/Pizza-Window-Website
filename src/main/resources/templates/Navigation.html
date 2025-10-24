@@ -1,22 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-  </head>
-  <body>
-    <nav th:fragment="navbar()">
-      <div class="navbar">
-        <div class="logo">
-          <a th:href="@{/}">🍕 Pizza Window</a>
-        </div>
-        <div class="nav-links">
-          <a th:href="@{/}">Home</a>
-          <a th:href="@{/products}">Menu</a>
-          <a th:href="@{/location}">Location</a>
-          <a th:href="@{/about}">About</a>
-          <a th:href="@{/login}">Login</a>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" th:href="@{/css/Navigation.css}">
+</head>
+<body>
+<nav th:fragment="navbar()">
+  <div class="navbar">
+    <div class="logo">
+      <a th:href="@{/}">🍕 Pizza Window</a>
+    </div>
+    <div class="nav-links">
+      <a th:href="@{/}">Home</a>
+      <a th:href="@{/products}">Menu</a>
+      <a th:href="@{/locate}">Location</a>
+      <a th:href="@{/about}">About</a>
+
+      <!-- User Info (shown when logged in) -->
+      <div class="user-info" id="userInfo" style="display: none;">
+        <span class="user-email" id="userEmail"></span>
+        <a href="javascript:void(0)" class="logout-btn" onclick="handleLogout()">Logout</a>
       </div>
-    </nav>
-  </body>
+
+      <!-- Login Link (shown when not logged in) -->
+      <a th:href="@{/login}" id="loginLink" style="display: block;">Login</a>
+    </div>
+  </div>
+
+  <script>
+    function handleLogout() {
+        localStorage.clear();
+        alert('Logged out successfully!');
+        window.location.href = '/';
+    }
+
+    function checkLoginStatus() {
+        const token = localStorage.getItem('token');
+        const email = localStorage.getItem('email');
+
+        const userInfo = document.getElementById('userInfo');
+        const loginLink = document.getElementById('loginLink');
+        const userEmail = document.getElementById('userEmail');
+
+        if (token && email) {
+            // Logged in
+            if (userInfo) userInfo.style.display = 'flex';
+            if (loginLink) loginLink.style.display = 'none';
+            if (userEmail) userEmail.textContent = email;
+        } else {
+            // Not logged in
+            if (userInfo) userInfo.style.display = 'none';
+            if (loginLink) loginLink.style.display = 'block';
+        }
+    }
+
+    // Run on page load
+    checkLoginStatus();
+
+    // Run after a short delay to ensure DOM is ready
+    setTimeout(checkLoginStatus, 100);
+  </script>
+</nav>
+</body>
 </html>
