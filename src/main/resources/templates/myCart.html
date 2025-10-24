@@ -1,63 +1,166 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>Pizza Window | My Cart</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-    <style>
-        body { background: #fff8f0; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-        .navbar { /* copy your existing navbar styles here */ }
-        .cart-section { max-width: 800px; margin: 40px auto; background: white; border-radius: 18px; box-shadow: 0 2px 16px #eee; padding: 24px;}
-        h2 { color: #FF6B6B; text-align: center; }
-        table { border-collapse: collapse; width: 100%; margin-top: 10px;}
-        th, td { padding: 10px 13px; border-bottom: 1px solid #eee;}
-        th { background: #FFB88C; color: #333; }
-        tr:last-child td { border-bottom: none; }
-        .total-row td { font-weight: bold; border-top: 2px solid #FFB88C; }
-        .checkout-btn { background: #FF6B6B; color: white; border: none; border-radius: 12px; padding: 10px 30px; font-size: 17px; cursor: pointer; margin: 18px auto 0; display: block; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pizza Window | My Cart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/css/Navigation.css}" />
+  <style>
+    body {
+        background: linear-gradient(135deg, #fff8f0 0%, #f4d2b3 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        overflow-x: hidden;
+    }
+    .cart-hero {
+        background: linear-gradient(135deg, #ffbe53 0%, #ff6b6b 100%);
+        padding: 42px 0 30px;
+        text-align: center;
+        box-shadow: 0 2px 12px #f6b45221;
+    }
+    .cart-hero h1 {
+        color: white;
+        font-size: 3rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+    }
+    .cart-hero p {
+        color: #fff;
+        font-size: 1.15rem;
+    }
+    .cart-section {
+        max-width: 850px;
+        margin: 42px auto;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 3px 32px rgba(255, 164, 80, 0.14);
+        padding: 36px 26px 28px 26px;
+    }
+    .cart-header {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+    .cart-header i {
+        color: #ff6b6b;
+        font-size: 2.7rem;
+    }
+    .cart-header h2 {
+        color: #ff663a;
+        font-size: 2.1rem;
+        font-weight: bold;
+        letter-spacing: 1.2px;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+    th, td {
+        padding: 13px 14px;
+        border-bottom: 1px solid #f4d2b3;
+        text-align: left;
+    }
+    th {
+        background: #ffb88c;
+        color: #333;
+    }
+    .total-row td {
+        font-weight: 700;
+        border-top: 2px solid #ffb88c;
+        background: #fff6ed;
+        color: #d46b07;
+    }
+    .remove-btn {
+        color: #ff2424;
+        cursor: pointer;
+        font-size: 18px;
+        transition: color 0.16s;
+    }
+    .remove-btn:hover {
+        color: #e31426;
+    }
+    .checkout-btn {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffbe53 100%);
+        color: white;
+        border: none;
+        border-radius: 22px;
+        padding: 14px 44px;
+        font-size: 18px;
+        font-weight: 600;
+        margin: 22px auto 0 auto;
+        display: block;
+        box-shadow: 0 2px 8px #ffd18c60;
+        cursor: pointer;
+        transition: background 0.2s;
+        letter-spacing: 1px;
+    }
+    .checkout-btn:hover {
+        background: linear-gradient(135deg, #ffbe53 0%, #ff6b6b 100%);
+    }
+    .empty-message {
+        text-align: center;
+        font-size: 19px;
+        color: #b56b27;
+        padding: 42px 0;
+        letter-spacing: 0.8px;
+    }
+    @media (max-width: 900px) {
+        .cart-section { max-width: 98vw; padding: 14px 4vw; }
+        .cart-hero h1 { font-size: 2.2rem; }
+        .cart-header h2 { font-size: 1.3rem; }
+    }
+  </style>
 </head>
 <body>
-<div class="navbar">
-    <span>🍕 Pizza Window</span>
-    <span>
-      <a href="/">Home</a>
-      <a href="/products">Menu</a>
-      <a href="/locate">Location</a>
-      <a href="/about">About</a>
-      <a href="/myCart">My Cart</a>
-      <a href="/logout">Logout</a>
-    </span>
+<nav th:replace="~{Navigation::navbar()}"></nav>
+
+<div class="cart-hero">
+  <h1><i class="fa-solid fa-cart-shopping"></i> My Cart</h1>
+  <p>Your selected items ready to checkout!</p>
 </div>
 
-<section class="cart-section">
-    <h2>My Cart</h2>
+<div class="cart-section">
+  <div class="cart-header">
+    <i class="fa-solid fa-pizza-slice"></i>
+    <h2>Your Cart Items</h2>
+  </div>
+  <div th:if="${#lists.isEmpty(cart)}">
+    <div class="empty-message"><i class="fa-regular fa-face-frown"></i> Your cart is empty!</div>
+  </div>
+  <div th:if="${!#lists.isEmpty(cart)}">
     <table>
-        <tr>
-            <th>Product</th>
-            <th>Price</th>
-            <th>QTY</th>
-            <th>Subtotal</th>
-            <th>Remove</th>
-        </tr>
-        <tr th:each="item : ${cart.items}">
-            <td th:text="${item.product.pname}">Pizza</td>
-            <td th:text="${item.product.pprice}">200</td>
-            <td th:text="${item.quantity}">1</td>
-            <td th:text="${#numbers.formatDecimal(item.product.pprice * item.quantity, 2, 'POINT', ',', '')}">200</td>
-            <td>
-                <a th:href="@{'/cart/remove/' + ${item.id}}" style="color:red">
-                    <i class="fa-solid fa-trash"></i>
-                </a>
-            </td>
-        </tr>
-        <tr class="total-row">
-            <td colspan="3">Total</td>
-            <td th:text="${cart.items.?sum(item -> item.product.pprice * item.quantity)}">0</td>
-            <td></td>
-        </tr>
+      <tr>
+        <th>Product</th>
+        <th>Unit Price</th>
+        <th>Qty</th>
+        <th>Subtotal</th>
+        <th>Remove</th>
+      </tr>
+      <tr th:each="item : ${cart}">
+        <td th:text="${item.productName}">Pizza Margherita</td>
+        <td th:text="${item.price}">199</td>
+        <td th:text="${item.qty}">1</td>
+        <td th:text="${item.price * item.qty}">199</td>
+        <td>
+          <a class="remove-btn" th:href="@{'/cart/remove/' + ${item.productId}}">
+            <i class="fa-solid fa-trash"></i>
+          </a>
+        </td>
+      </tr>
+      <tr class="total-row">
+        <td colspan="3">Total</td>
+        <td th:text="${cart.?sum(item -> item.price * item.qty)}">0</td>
+        <td></td>
+      </tr>
     </table>
-    <button class="checkout-btn">Checkout</button>
-</section>
+    <button class="checkout-btn"><i class="fa-solid fa-credit-card"></i> Proceed to Checkout</button>
+  </div>
+</div>
 </body>
 </html>
