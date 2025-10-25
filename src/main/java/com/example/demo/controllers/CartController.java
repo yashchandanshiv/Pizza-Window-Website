@@ -204,4 +204,9 @@ public class CartController {
         response.put("message", "Cart cleared successfully");
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/checkout")
+    public String checkout() {
+        return "checkout";
+    }
 }

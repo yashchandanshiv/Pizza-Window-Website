@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Pizza Window</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" th:href="@{/css/Navigation.css}" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #fff8f0 0%, #f4d2b3 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .checkout-hero {
+            background: linear-gradient(135deg, #ffbe53 0%, #ff6b6b 100%);
+            padding: 42px 0 30px;
+            text-align: center;
+            box-shadow: 0 2px 12px #f6b45221;
+        }
+
+        .checkout-hero h1 {
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .checkout-hero p {
+            color: #fff;
+            font-size: 1.15rem;
+        }
+
+        .checkout-container {
+            max-width: 600px;
+            margin: 42px auto;
+            padding: 0 20px;
+        }
+
+        .checkout-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 3px 32px rgba(255, 164, 80, 0.14);
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff663a;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #ffb88c;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .order-item:not(:last-child) {
+            border-bottom: 1px solid #f4d2b3;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #d46b07;
+            border-top: 2px solid #ffb88c;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #f4d2b3;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 2px solid #f4d2b3;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: #ff6b6b;
+            background: #fff6ed;
+        }
+
+        .payment-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .payment-option label {
+            flex: 1;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffbe53 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .place-order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart i {
+            font-size: 64px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h2 {
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .empty-cart a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffbe53 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-hero h1 {
+                font-size: 2rem;
+            }
+
+            .checkout-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav th:replace="~{Navigation::navbar()}"></nav>
+
+<div class="checkout-hero">
+    <h1><i class="fa-solid fa-shopping-bag"></i> Checkout</h1>
+    <p>Complete your order</p>
+</div>
+
+<div class="checkout-container" id="checkoutContainer">
+    <div class="empty-cart" id="emptyCart" style="display: none;">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <h2>Your cart is empty!</h2>
+        <p>Add some delicious pizzas to proceed.</p>
+        <a href="/products">Browse Menu</a>
+    </div>
+
+    <div id="checkoutContent" style="display: none;">
+        <!-- Order Summary -->
+        <div class="checkout-section">
+            <div class="section-title">ORDER SUMMARY</div>
+            <div id="orderItems"></div>
+            <div class="order-total">
+                <span>Total:</span>
+                <span id="orderTotal">₹0</span>
+            </div>
+        </div>
+
+        <!-- Delivery Details -->
+        <div class="checkout-section">
+            <div class="section-title">DELIVERY DETAILS</div>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label class="form-label">Name:</label>
+                    <input type="text" id="customerName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone:</label>
+                    <input type="tel" id="customerPhone" class="form-input" required pattern="[0-9]{10}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address:</label>
+                    <textarea id="customerAddress" class="form-textarea" required></textarea>
+                </div>
+            </form>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="checkout-section">
+            <div class="section-title">PAYMENT METHOD</div>
+            <div class="payment-options">
+                <div class="payment-option">
+                    <input type="radio" name="paymentMethod" id="upiPayment" value="UPI" checked>
+                    <label for="upiPayment">Pay via UPI (PhonePe/GPay)</label>
+                </div>
+                <div class="payment-option">
+                    <input type="radio" name="paymentMethod" id="codPayment" value="COD">
+                    <label for="codPayment">Cash on Delivery</label>
+                </div>
+            </div>
+        </div>
+
+        <button class="place-order-btn" onclick="placeOrder()">
+            <i class="fa-solid fa-check-circle"></i> Place Order
+        </button>
+    </div>
+</div>
+
+<script>
+    const userId = 1; // Get from localStorage in production
+    let cartData = [];
+    let totalAmount = 0;
+
+    async function loadCheckoutData() {
+        try {
+            const response = await fetch(`/api/cart/user/${userId}`);
+            const cart = await response.json();
+            cartData = cart;
+
+            if (!cart || cart.length === 0) {
+                document.getElementById('emptyCart').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('checkoutContent').style.display = 'block';
+
+            // Populate order items
+            const orderItemsDiv = document.getElementById('orderItems');
+            totalAmount = 0;
+
+            orderItemsDiv.innerHTML = cart.map(item => {
+                const subtotal = item.subtotal || (item.price * item.qty);
+                totalAmount += subtotal;
+                return `
+                    <div class="order-item">
+                        <span>• ${item.productName} x${item.qty}</span>
+                        <span>₹${subtotal.toFixed(2)}</span>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('orderTotal').textContent = `₹${totalAmount.toFixed(2)}`;
+        } catch (error) {
+            console.error('Error loading checkout data:', error);
+            alert('Failed to load cart data');
+        }
+    }
+
+    async function placeOrder() {
+        const name = document.getElementById('customerName').value;
+        const phone = document.getElementById('customerPhone').value;
+        const address = document.getElementById('customerAddress').value;
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+        if (!name || !phone || !address) {
+            alert('Please fill all delivery details!');
+            return;
+        }
+
+        if (phone.length !== 10) {
+            alert('Please enter a valid 10-digit phone number!');
+            return;
+        }
+
+        // Handle payment based on method
+        if (paymentMethod === 'UPI') {
+            showUPIPayment();
+        } else {
+            // Cash on Delivery - directly send WhatsApp
+            confirmOrder(name, phone, address, 'Cash on Delivery', null);
+        }
+    }
+
+    function showUPIPayment() {
+        const name = document.getElementById('customerName').value;
+        const phone = document.getElementById('customerPhone').value;
+        const address = document.getElementById('customerAddress').value;
+
+        // Create modal for UPI payment
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        `;
+
+        modal.innerHTML = `
+            <div style="background: white; padding: 40px; border-radius: 20px; max-width: 500px; text-align: center;">
+                <h2 style="color: #ff6b6b; margin-bottom: 20px;">Pay via UPI</h2>
+                <p style="font-size: 18px; margin-bottom: 20px;">Scan QR Code to Pay ₹${totalAmount.toFixed(2)}</p>
+
+                <!-- Replace with your actual QR code image -->
+                <img src="/images/upi-qr.jpg"
+                     alt="UPI QR Code"
+                     style="width: 250px; height: 250px; margin: 20px auto; border: 3px solid #f4d2b3; border-radius: 15px;"
+                     onerror="this.src='https://via.placeholder.com/250x250/FFB88C/ffffff?text=QR+Code'">
+
+                <p style="margin: 20px 0; font-weight: 600;">UPI ID: yashchandanshiv08-1@okaxis</p>
+
+                <div style="margin: 20px 0;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 600;">Enter Transaction ID:</label>
+                    <input type="text"
+                           id="transactionId"
+                           placeholder="e.g., 123456789012"
+                           style="width: 100%; padding: 12px; border: 2px solid #f4d2b3; border-radius: 10px; font-size: 16px;">
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button onclick="closeModal()"
+                            style="flex: 1; padding: 15px; background: #f4d2b3; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button onclick="verifyPayment('${name}', '${phone}', '${address}')"
+                            style="flex: 1; padding: 15px; background: linear-gradient(135deg, #ff6b6b 0%, #ffbe53 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        Confirm Payment
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        window.currentModal = modal;
+    }
+
+    function closeModal() {
+        if (window.currentModal) {
+            window.currentModal.remove();
+        }
+    }
+
+    function verifyPayment(name, phone, address) {
+        const transactionId = document.getElementById('transactionId').value;
+
+        if (!transactionId || transactionId.length < 8) {
+            alert('Please enter a valid transaction ID!');
+            return;
+        }
+
+        closeModal();
+        confirmOrder(name, phone, address, 'UPI Payment', transactionId);
+    }
+
+    async function confirmOrder(name, phone, address, paymentMethod, transactionId) {
+        try {
+            // Prepare order details
+            const orderItems = cartData.map(item =>
+                `${item.productName} x${item.qty} - ₹${item.subtotal || (item.price * item.qty)}`
+            ).join('\n');
+
+            // Send WhatsApp notification
+            sendWhatsAppOrder({
+                items: orderItems,
+                total: totalAmount,
+                name: name,
+                phone: phone,
+                address: address,
+                paymentMethod: paymentMethod,
+                transactionId: transactionId
+            });
+
+            // Clear cart
+            await fetch(`/api/cart/clear/${userId}`, { method: 'DELETE' });
+
+            // Show success message
+            alert('Order placed successfully! Check WhatsApp for confirmation.');
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Error placing order:', error);
+            alert('Failed to place order. Please try again.');
+        }
+    }
+
+    function sendWhatsAppOrder(orderDetails) {
+        const phone = "917385139854"; // Replace with actual owner's WhatsApp number
+        const message = `
+🍕 *New Order - Pizza Window*
+
+📦 *Order Items:*
+${orderDetails.items}
+
+💰 *Total: ₹${orderDetails.total.toFixed(2)}*
+
+👤 *Customer Details:*
+Name: ${orderDetails.name}
+📱 Phone: ${orderDetails.phone}
+📍 Address: ${orderDetails.address}
+
+💳 *Payment: ${orderDetails.paymentMethod}*
+${orderDetails.transactionId ? '🔢 Transaction ID: ' + orderDetails.transactionId : ''}
+        `.trim();
+
+        const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    }
+
+    // Load checkout data on page load
+    loadCheckoutData();
+</script>
+</body>
+</html>

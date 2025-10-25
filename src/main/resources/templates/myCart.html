@@ -186,9 +186,10 @@
         <td></td>
       </tr>
     </table>
-    <button class="checkout-btn" onclick="alert('Checkout feature coming soon!')">
+    <button class="checkout-btn" onclick="window.location.href='/checkout'">
       <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
     </button>
+
   </div>
 </div>
 <script>
@@ -196,7 +197,7 @@
   function checkLogin() {
       const token = localStorage.getItem('token');
       const email = localStorage.getItem('email');
-      
+
       if (!token || !email) {
           alert('Please login to view your cart!');
           window.location.href = '/login';
