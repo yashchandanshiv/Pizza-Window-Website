@@ -69,12 +69,14 @@
     th {
         background: #ffb88c;
         color: #333;
+        font-weight: 600;
     }
     .total-row td {
         font-weight: 700;
         border-top: 2px solid #ffb88c;
         background: #fff6ed;
         color: #d46b07;
+        font-size: 18px;
     }
     .remove-btn {
         color: #ff2424;
@@ -110,10 +112,28 @@
         padding: 42px 0;
         letter-spacing: 0.8px;
     }
+    .empty-message i {
+        font-size: 48px;
+        display: block;
+        margin-bottom: 20px;
+    }
     @media (max-width: 900px) {
-        .cart-section { max-width: 98vw; padding: 14px 4vw; }
-        .cart-hero h1 { font-size: 2.2rem; }
-        .cart-header h2 { font-size: 1.3rem; }
+        .cart-section {
+            max-width: 98vw;
+            padding: 14px 4vw;
+        }
+        .cart-hero h1 {
+            font-size: 2.2rem;
+        }
+        .cart-header h2 {
+            font-size: 1.3rem;
+        }
+        table {
+            font-size: 14px;
+        }
+        th, td {
+            padding: 10px 8px;
+        }
     }
   </style>
 </head>
@@ -130,10 +150,17 @@
     <i class="fa-solid fa-pizza-slice"></i>
     <h2>Your Cart Items</h2>
   </div>
-  <div th:if="${#lists.isEmpty(cart)}">
-    <div class="empty-message"><i class="fa-regular fa-face-frown"></i> Your cart is empty!</div>
+
+  <!-- Check if cart is null or empty -->
+  <div th:if="${cart == null or cart.isEmpty()}">
+    <div class="empty-message">
+      <i class="fa-regular fa-face-frown"></i>
+      <div>Your cart is empty!</div>
+    </div>
   </div>
-  <div th:if="${!#lists.isEmpty(cart)}">
+
+  <!-- Show cart items if not empty -->
+  <div th:if="${cart != null and !cart.isEmpty()}">
     <table>
       <tr>
         <th>Product</th>
@@ -143,24 +170,44 @@
         <th>Remove</th>
       </tr>
       <tr th:each="item : ${cart}">
-        <td th:text="${item.productName}">Pizza Margherita</td>
-        <td th:text="${item.price}">199</td>
-        <td th:text="${item.qty}">1</td>
-        <td th:text="${item.price * item.qty}">199</td>
+        <td th:text="${item['productName']}">Pizza</td>
+        <td th:text="'₹' + ${item['price']}">₹199</td>
+        <td th:text="${item['qty']}">1</td>
+        <td th:text="'₹' + ${item['subtotal']}">₹199</td>
         <td>
-          <a class="remove-btn" th:href="@{'/cart/remove/' + ${item.productId}}">
+          <a class="remove-btn" href="javascript:void(0)" onclick="alert('Remove feature coming soon!')">
             <i class="fa-solid fa-trash"></i>
           </a>
         </td>
       </tr>
       <tr class="total-row">
         <td colspan="3">Total</td>
-        <td th:text="${cart.?sum(item -> item.price * item.qty)}">0</td>
+        <td th:text="'₹' + ${total}">₹0</td>
         <td></td>
       </tr>
     </table>
-    <button class="checkout-btn"><i class="fa-solid fa-credit-card"></i> Proceed to Checkout</button>
+    <button class="checkout-btn" onclick="alert('Checkout feature coming soon!')">
+      <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
+    </button>
   </div>
 </div>
+<script>
+  // Check if user is logged in
+  function checkLogin() {
+      const token = localStorage.getItem('token');
+      const email = localStorage.getItem('email');
+      
+      if (!token || !email) {
+          alert('Please login to view your cart!');
+          window.location.href = '/login';
+          return false;
+      }
+      return true;
+  }
+
+  // Run on page load
+  checkLogin();
+</script>
+
 </body>
 </html>

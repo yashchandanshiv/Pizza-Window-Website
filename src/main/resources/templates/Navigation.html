@@ -11,11 +11,17 @@
       <a th:href="@{/}">🍕 Pizza Window</a>
     </div>
     <div class="nav-links">
+      <!-- WhatsApp Link -->
+      <a href="https://wa.me/7020921457?text=Hello%20Pizza%20Window!" target="_blank" class="whatsapp-link">
+        <i class="fab fa-whatsapp"></i> Order Via WhatsApp
+      </a>
       <a th:href="@{/}">Home</a>
       <a th:href="@{/products}">Menu</a>
       <a href="/myCart">My Cart</a>
       <a th:href="@{/locate}">Location</a>
       <a th:href="@{/about}">About</a>
+
+
 
       <!-- User Info (shown when logged in) -->
       <div class="user-info" id="userInfo" style="display: none;">
