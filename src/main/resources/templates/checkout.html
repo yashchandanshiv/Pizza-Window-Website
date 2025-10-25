@@ -447,8 +447,7 @@
 
     function sendWhatsAppOrder(orderDetails) {
         const phone = "917385139854"; // Replace with actual owner's WhatsApp number
-        const message = `
-🍕 *New Order - Pizza Window*
+        const message = `🍕 *New Order - Pizza Window*
 
 📦 *Order Items:*
 ${orderDetails.items}
@@ -462,7 +461,9 @@ Name: ${orderDetails.name}
 
 💳 *Payment: ${orderDetails.paymentMethod}*
 ${orderDetails.transactionId ? '🔢 Transaction ID: ' + orderDetails.transactionId : ''}
-        `.trim();
+
+⚠️ *Action Required:*
+Please verify payment in your UPI app before confirming order.`;
 
         const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
